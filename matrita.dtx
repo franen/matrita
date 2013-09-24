@@ -1,0 +1,2276 @@
+% \iffalse
+%<*internal>
+\begingroup
+\input docstrip.tex
+\keepsilent
+\usedir{tex/latex/matrita}
+\preamble
+  ___________________________________________________________
+  The matrita package for LaTeX
+  Copyright (C) 2012 Francesco Endrici
+  All rights reserved
+
+  License information appended
+
+\endpreamble
+\postamble
+
+Copyright 2012 Francesco Endrici <francescoendrici at gmail dot com>
+
+Distributable under the LaTeX Project Public License,
+version 1.3c or higher. The latest version of
+this license is at: http://www.latex-project.org/lppl.txt
+
+This work is "author-maintained"
+
+This work consists of this file matrita.dtx, a README file,
+the derived files matrita.sty and matrita.pdf and the example file matrimonio.tex.
+
+\endpostamble
+\askforoverwritefalse
+
+\generate{\file{matrita.sty}{\from{matrita.dtx}{package}}}
+
+\endgroup
+%</internal>
+%
+%<*driver>
+\ProvidesFile{matrita.dtx}%
+%</driver>
+%<package>\NeedsTeXFormat{LaTeX2e}[2005/12/01]
+%<package>\ProvidesPackage{matrita}%
+%<*package>
+   [2013/03/13 v0.3 Package for creating wedding Mass booklets]
+% revisioni 0.2 aggiunto il codice per inserire i commenti
+%0.3: cambiato il nome di default del Papa, modificato spaziatura tabella litanie, ridefinito \respfont come dichiarazione perché possa essere usato nelle litanie. Corretto refusi nei testi
+%</package>
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english,italian]{babel}
+\usepackage[osf]{libertine}
+\usepackage[scaled=0.85]{beramono}
+\usepackage[a4paper]{geometry}
+\usepackage{metalogo}
+\usepackage{guit}
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage[comment]{matrita}
+\RequirePackage{titletoc}
+\titlecontents{section} 
+	[0pt] 
+	{\addvspace{0pt}}
+	{\makebox[2ex][l]{\thecontentslabel}\hspace*{1ex}}
+	{} 
+	{\contentspage}
+	[\addvspace{0.2pc}] 
+\def\itemlayout{\normalfont\ttfamily\bfseries}
+\newcommand{\pack}[1]{\textsf{#1}}
+\newenvironment{cella}{\smallskip\begin{mdframed}[innertopmargin=10pt,innerbottommargin=10pt,innerleftmargin=10pt,innerrightmargin=10pt,roundcorner=5pt,skipbelow=4pt,linecolor=grigio,middlelinewidth=2pt]\parindent 0pt%
+}{\end{mdframed}}
+\newcommand{\singolform}[1]{\begin{cella}#1\end{cella}}
+\newcounter{formulacount}
+\newenvironment{formula}{\par\medskip\refstepcounter{formulacount}\begin{cella}\noindent\textsf{\textbf{ Formula \Roman{formulacount}}}\par\nobreak\smallskip}{\end{cella}\par\bigskip}
+\usepackage{hyperref}
+\begin{document}
+\makeatletter
+\GetFileInfo{matrita.dtx}
+\title{Creare libretti per matrimoni con \LaTeX%
+       \thanks{Questa guida si riferisce alla versione~\fileversion{} del pacchetto,
+                 rilasciata il \filedate.}}
+\author{Francesco Endrici\thanks{francescoendrici at gmail dot com}}
+\date{Stampato il \today}
+
+\maketitle
+\RecordChanges
+  \DocInput{matrita.dtx}
+  \PrintChanges
+\end{document}
+%</driver>
+% \fi
+%  %\CheckSum{1591}
+%
+%  \changes{v0.1}{2012/08/01}{Prima versione pubblica}
+%  \changes{v0.2}{2012/09/03}{Aggiunto il codice per inserire i commenti}
+%  \changes{v0.3}{2013/03/16}{Modificato il nome del Papa, modificato \respfont e la spaziatura nelle litanie}
+% \begin{abstract}
+% Questo pacchetto permette di inserire all'interno di un documento \LaTeX{} le parti della Messa riguardanti la celebrazione del Matrimonio. I testi sono stati presi dal sito \url{http://www.liturgia.maranatha.it/Matrimonio/coverpage.htm} e dal libretto “La messa degli sposi”, ed. Paoline 2008.
+%
+% Offre inoltre dei comandi utili per gestire delle parti quali le canzoni e le risposte alle invocazioni.
+% \end{abstract}
+% \tableofcontents
+% \section{Introduzione}
+% Nello sviluppo di questo pacchetto ho provato a individuare le principali \emph{strutture logiche} che compongono il rito del Matrimonio e ho tentato di scrivere un codice che riuscisse a rappresentarle in maniera flessibile.
+% Le strutture considerate sono:
+% \begin{itemize}
+% \item Titoli dei momenti della Messa
+% \item Canzoni
+% \item Letture 
+% \item Preghiere (frasi a cui viene data una risposta)
+% \end{itemize}
+% \section{Uso e opzioni}
+% Il pacchetto si carica con il comando \verb!\usepackage[opzioni]{matrita}!.
+%
+% Le opzioni del pacchetto sono:
+% \begin{description}
+% \item[cross] Opzione caricata di default, stampa la croce maltese \cross{} laddove il sacerdote fa un segno di benedizione (Vangelo, benedizione finale, Consacrazione).
+% \item[nocross] Non stampa la croce maltese in nessun caso.
+% \item[nofigli] Non stampa delle parti della liturgia in cui si invoca la benedizione dei figli o si parla degli sposi come di genitori. Questo potrebbe rivelarsi utile per sposi di età avanzata (i brani eliminati sono quelli indicati ne “La messa degli sposi” ed. San Paolo).
+% \item[figli] Opzione di default, stampa integralmente i brani della liturgia.
+% \item[comment] Stampa i commenti ai momenti liturgici utilizzando i testi presi dal Messale Romano.
+% \item[nocomment] Opzione di default: i commenti non vengono stampati.
+% \item[leftjust] Stampa alcune parti della liturgia con giustificazione a sinistra.
+% \item[noleftjust] Opzione di default. Le parti della Liturgia (salvo Gloria e Credo) vengono giustificate a tutta larghezza.
+% \end{description}
+% \section{Momenti della Messa}
+% Nella liturgia del Matrimonio vengono individuati i seguenti momenti:
+% \begin{description}
+% \item[Riti di introduzione] Cioè il momento in cui il Sacerdote
+% accoglie gli sposi e si fa memoria del Battesimo (che può essere 
+% inserita come Momento a sé.)
+% \item[Memoria del Battesimo] Ufficialmente fa parte dei Riti di
+% Introduzione, ma può essere 
+% inserito come Momento a sé. Comprende la Colletta.
+% \item[Liturgia della Parola] Le due Letture, il Salmo e il Vangelo.
+% \item[Liturgia del Matrimonio] Che comprende i seguenti punti:
+% \begin{itemize}
+% \item Interrogazione prima del consenso
+% \item Manifestazione del consenso
+% \item Accoglienza del consenso
+% \item Benedizione e consegna degli anelli
+% \item Incoronazinoe degli sposi (dove è usanza)
+% \item Benedizione nuziale (solitamente dopo il Padre nostro, ma può essere anticipata)
+% \item Preghiera dei fedeli e invocazione dei Santi
+% \end{itemize}
+% \item[Liturgia Eucaristica] Che va dalla presentazione dei doni fino alla Benedizione nuziale.
+% \item[Riti di conclusione] Che comprendono la Benedizione degli Sposi e del Popolo e la firma degli atti di Matrimonio.
+% \end{description}
+% Per stampare i titoli dei momenti della liturgia è stato definito un
+% solo comando, \verb!\momento!. Si è scelto
+% di non creare comandi di sezionamento di livello inferiore. Ognuno è
+% ovviamente libero di definirli da sé. Per modificare il comando
+% basta ridefinirlo, di default vale:
+% \begin{verbatim} 
+% \newcommand{\momento}[1]{%
+% {\par\vspace{\premomentoskip}%
+% \noindent\LARGE\maiuscolettospaziato{#1}}%
+% \par\nobreak\bigskip%
+% }
+% \end{verbatim}
+% Il titolo del momento è preceduto da una spaziatura verticale pari a \cs{premomentoskip}.
+%
+% Il paccheto \pack{matrita} mette a disposizione il comando \verb!\maiuscolettospaziato! (per cui ho preso spunto dal codice contenuto in \pack{arsclassica} di Lorenzo Pantieri) per stampare del testo in maiuscoletto spaziato. Il comando funziona sia con pdf\LaTeX{} che con \XeLaTeX. Bisogna fare attenzione che il comando trasforma tutte le lettere in lettere minuscole (ma non è difficile definire un comando analogo che mantenga le lettere maiuscole).
+% \section{Canzoni}
+% Per scrivere le canzoni si è deciso di appoggiarsi al pacchetto \pack{verse}. Esistono dei pacchetti appositamente scritti per la gestione delle canzoni (come ad esempio Songs di Kevin Hamlen), ma il loro utilizzo non è così facile come quello di un ambiente \texttt{verse}.
+%
+% Una canzone viene inserita con la sintassi:
+% \begin{verbatim}
+% \settowidth{\versewidth}{Accogli Signore i nostri doni}
+% \canztitle{Accogli}
+% \begin{canzone}[\versewidth]
+% Accogli Signore i nostri doni\\
+% in questo misterioso incontro [\dots]
+%
+% \begin{ritornello}
+% Testo del ritornello\\
+% testo del ritornello
+% \end{ritornello}
+% \end{canzone}
+% \end{verbatim}
+% Che produce:
+%
+% %\begin{cella}
+% \settowidth{\versewidth}{Accogli Signore i nostri doni}
+% \canztitle{Accogli}
+% \begin{canzone}[\versewidth]
+% Accogli Signore i nostri doni\\
+% in questo misterioso incontro [\dots]
+%
+% \begin{ritornello}
+% Testo del ritornello\\
+% testo del ritornello
+% \end{ritornello}
+% \end{canzone}
+% \end{cella}
+%
+% Secondo il comportamento standard di \pack{verse} i titoli vengono centrati nella pagina e il testo viene centrato in una maniera particolare: resta allineato a sinistra, ma con un rientro che fa in modo che la riga impostata come la lunghezza di riferimento --- in questo caso “Accogli Signore i nostri doni” --- risulti centrata. Se in apertura dell'ambiente non si esplicita l'argomento opzionale \cs{versewidth}, si ottiene un rientro pari a \cs{leftmargini}. Occorre fare attenzione che in questo caso il titolo resta centrato nella pagina, se lo si vuole allineare a sinistra bisogna ridefinire il comando \cs{poemtitlefont}.
+%
+% Di seguito si descrivono i comandi che concorrono alla formattazione delle canzoni.
+% \begin{description}\def\Item[#1]{\item[\cs{#1}]}
+% \Item[leftmargini] Lunghezza (del pacchetto \pack{verse}) che regola il rientro di tutto il testo della canzone. Di default è impostato a 0~em. Ha effetto solo se non si esplicita l'argomento opzionale dell'ambiente \texttt{canzone} (Solitamente \verb!\begin{canzone}[\versewidth]!).
+% \Item[titleindent] Lunghezza che regola il rientro del titolo della canzone. Di default è impostato a 0em. Potrebbe essere utilizzato qualora si ridefinisca \cs{poemtitlefont} in modo che i titoli non siano più centrati nella pagina.
+% \Item[beforepoemtitleskip] Lunghezza (del pacchetto \pack{verse}) che regola la distanza verticale fra il titolo di una canzone e ciò che lo precede. Di default vale 3.5 ex plus 1ex minus 0.2 ex.
+% \Item[afterpoemtitleskip] Lunghezza (del pacchetto \pack{verse}) che regola la distanza verticale fra il titolo e la prima riga della canzone. Di default vale 2.3 ex plus 0.2 ex.
+% \Item[poemtitlefont] Comando (del pacchetto \pack{verse}) che regola la formattazione del titolo di una canzone. Di default è \verb!\newcommand{\poemtitlefont}{\normalfont\large\bfseries\centering}!
+% \Item[canztitle] Comando che permette di inserire il titolo della canzone, si usa prima di aprire l'ambiente \texttt{canzone}.
+% \Item[precanztitle] Comando che permette di inserire un oggetto, un testo o qualsiasi altra cosa prima del titolo della canzone. Di default viene inserito \verb!\decothreeleft! del pacchetto \pack{fourier-orns}.
+% \Item[postcanztitle] Comando che permette di inserire un oggetto, un testo o qualsiasi altra cosa dopo il titolo della canzone. Di default viene inserito \verb!\decothreeright! del pacchetto \pack{fourier-orns}.
+% \Item[ritfont] Comando che permette di impostare il font dei ritornelli delle canzoni. Per definire un ritornello occorre usare l'ambiente \verb!ritornello!.
+% \end{description}
+% \section{Liturgia della Parola}
+% Per la gestione delle letture ho preso spunto da un messaggio di Enrico Gregorio sul forum del \GuIT{} \footnote{\url{www.guit.sssup.it/phpBB2/viewtopic.php?p=45249}}.
+%
+% Sono stati definiti due ambienti, \texttt{lettura} e \texttt{vangelo}. Entrambi hanno tre argomenti, di cui il primo è opzionale. Per inserire una lettura si scrive:
+%\begin{verbatim}
+% \begin{lettura}[Prima]{Dal libro della Genesi}{Gn\,1,\,1--25}
+% In principio Dio creò il cielo e la terra [\dots]
+% \end{lettura}
+%\end{verbatim}
+% E si ottiene:
+% \begin{cella}
+% \begin{lettura}[Prima]{Dal libro della Genesi}{Gn\,1,\,1--25}
+% In principio Dio creò il cielo e la terra [\dots]
+% \end{lettura}
+% \end{cella}
+% L'argomento opzionale serve per stampare le scritte “Prima lettura”, “Seconda lettura”. Se non si scrive nulla le stringhe di testo non vengono stampate.
+%
+% Analogamente per il Vangelo si scrive:
+%\begin{verbatim}
+% \begin{vangelo}[Vangelo]{Luca}{Lc\,1,\,1--25}
+% Testo testo
+% \end{vangelo}
+%\end{verbatim}
+% per ottenere:
+% \begin{cella}
+% \begin{vangelo}[Vangelo]{Luca}{Lc\,1,\,1--25}
+% Testo testo
+% \end{vangelo}
+% \end{cella}
+% Il testo scritto come argomento opzionale verrà stampato come intestazione. Se non si scrive nulla non verrà stampato nulla.
+%
+% I comandi che regolano la formattazione sono:
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[intestfont] Comando che gestisce la formattazione delle intestazioni (“Prima lettura”, “Vangelo”).
+% \Item[nomelibrofont] Comando che regola la formattazione del nome dei libri biblici (Dal Libro di\dots, Dal Vangelo secondo\dots).
+% \Item[rifbibfont] comando che regola la formattazione dei riferimenti biblici.
+% \end{description}
+% La formattazione delle risposte (“Rendiamo grazie a Dio”) verrà trattata più avanti.
+%
+% Il comando \cs{versettosalmo} definisce il testo dei ritornelli salmodici. Questo testo viene stampato dal comando \cs{rispostasalmo} (si veda la sezione seguente). Per definire il ritornello salmodico da utilizzare occorre scrivere:
+% \begin{verbatim}
+% \renewcommand{\versettosalmo}{Testo del versetto}
+% \end{verbatim}
+% \section{Risposte e invocazioni}
+% Nella Liturgia ci sono diverse occasioni nelle quali l'Assemblea o gli Sposi sono chiamati a rispondere a delle domande o a delle invocazioni. Nel pacchetto \pack{matrita} sono stati introdotti due comandi per gestire queste parti:
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[risposta] Viene usato per stampare le risposte che devono essere date soltanto dagli sposi. I comandi che ne regolano la formattazione sono:
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item [prerisp] Lunghezza che regola la distanza verticale fra la risposta e quanto la precede.
+% \Item [postrisp] Lunghezza che regola la distanza fra la risposta e quanto viene dopo.
+% \Item[respindent] Comando che regola il rientro delle risposte.
+% \Item[respfont] Comando che regola la formattazione del testo delle risposte. 
+% \end{description}
+% \Item[rispostatutti] Serve per stampare le risposte date da tutta l'Assemblea. Rispetto a \cs{risposta} inserisce prima del testo il simbolo \cs{respsym}. Di default viene inserito il simbolo \Rrecipe, ma ognuno può ridefinire il comando \cs{respsym} come preferisce. 
+%  Il colore con cui  il simbolo viene stampato è il \texttt{respcolor}. L'utente può modificare il colore a suo piacimento.
+% Alcune famiglie di font, come ad esempio l'EB Garamond, possiedono già questo simbolo. È anche possibile ottenerlo con il comando \cs{textrecipe} del pacchetto \pack{textcomp}.
+% \Item[rispostasalmo] Serve per stampare i ritornelli dei salmi che l'Assemblea canta o ripete. Il risultato estetico è simile a quello di \cs{rispostatutti}, ma vengono eliminati dei \cs{par} e delle spaziature per permetterne un efficace utilizzo all'interno di un ambiente \texttt{verse}.
+% \end{description}
+%
+% Legato al simbolo delle risposte c'è quello delle invocazioni, tradizionalmente una “V tagliata” \invocsym.
+% Questo simbolo viene utilizzato in due delle quattro possibili Benedizioni nuziali.
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[textinvoc] è il comando che si usa per gestire la formattazione delle invocazioni. Esso usa la stessa formattazione di \cs{rispostatutti}. Cioè utilizza \cs{prerisp} e \cs{respindent}.
+% \end{description}
+% \section{Altri comandi}\label{sec:altricom}
+%
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[NSposa] Si utilizza per indicare il nome della sposa (è impostato come “Giovanna”).
+% \Item[NSposo] Si utilizza per indicare il nome dello sposo (è impostato come “Giovanni”).
+% \Item[sposifont] Si utilizza per scegliere la formattazione dei nomi degli sposi nei testi della Liturgia.
+% \Item[sposa] È il nome della sposa formattato secondo il comando \cs{sposifont}.
+% \Item[sposo] È il nome dello sposo formattato secondo il comando \cs{sposifont}.
+% \Item[rispostafedeli] È la frase che si usa come risposta alle preghiere dei fedeli. Di default è “Ascoltaci, o Signore”.
+% \Item[mtrskip] Spaziatura verticale. Viene utilizzata ad esempio fra le promesse nuziali o nello scambio degli anelli, per separare la parte della sposa da quella dello sposo. Di default vale \cs{medskip}.
+% \Item[Santo] Usato nelle litanie, verifica se il nome dello
+% sposo inizia con una vocale o una consonante e sceglie di
+% conseguenza “Sant'” o “San”.
+% \Item[personallitania] È il comando che permette di inserire nelle litanie dei santi particolari.
+% Essi verranno inseriti in fondo, prima dei nomi degli sposi. Per inserire una o più litanie si dovrà scrivere: 
+% \begin{verbatim} 
+% \renewcommand{\personallitania}{%
+% Santo NomeSanto, & prega per noi\\
+% Santi NomeSanti, & pregate per noi\\}
+% \end{verbatim}
+% avendo cura di inserire le \& e le \verb!\\!.
+% \Item[litasposo] Comando che inserisce nelle litanie il nome dello sposo. Se per qualche motivo non lo si volesse (il nome dello sposo rientra già nelle litanie standard o non esiste un Santo che porti il nome dello sposo) si ridefinisca il comando: \verb!\renewcommand{\litasposo}{}!.
+% \Item[litasposa] Comando che inserisce nelle litanie il nome della sposa. Se per qualche motivo non lo si volesse (il nome della sposa rientra già nelle litanie standard o non esiste una Santa che porti il nome della sposa) si ridefinisca il comando: \verb!\renewcommand{\litasposa}{}!.
+% \Item[litachiesa] Comando che inserisce nelle litanie il nome del santo cui è intitolata la parrocchia o la chiesa in cui si celebra la Messa. Viene posta dopo la santa che porta il nome della sposa. Di default il comando non produce alcun testo. Se si vuole inserire questa litania si ridefinisca il comando: \verb!\renewcommand{\litachiesa}{Santo NomeSanto, & prega per noi\\}!.
+% \Item[miosanto] Comando che inserisce nella preghiera eucaristica il nome di un santo a piacimento. Di default non produce testo. Per inserire il nome di un santo, ad esempio Guglielmo, si scriva: \verb!\renewcommand{\miosanto}{san Guglielmo}!. 
+% \Item[nomevescovo] Comando per inserire il nome del Vescovo nella Preghiera Eucaristica. Di default produce NomeVescovo. Per impostare il nome corretto occorre ridefinire il comando:\\ \verb!\renewcommand{\nomevescovo}{Mario}!
+% \Item[nomepapa] Comando per inserire il nome del Papa nella Preghiera Eucaristica. Di default produce “Francesco”. Per impostare il nome corretto occorre ridefinire il comando: 
+% \begin{verbatim}
+% \renewcommand{\nomepapa}{Alfonso}
+% \end{verbatim}
+% \Item[cross] Comando che permette di stampare la Croce Maltese per indicare dei momenti in cui il sacerdote fa un segno di croce. Se non è attiva l'opzione \texttt{cross} non produce alcun segno. Il colore della croce è il \texttt{crosscolor}. Di default l'opzione \texttt{cross} è attiva e il colore è \texttt{crosscolor} (definito nel pacchetto).
+% \end{description}
+% \section{Commenti}
+% Il Messale utilizzato dal celebrante riporta, oltre ai testi che vengono letti, anche delle indicazioni sui gesti da eseguire o su come eseguire un rito.
+% Qualcuno potrebbe voler inserire queste indicazioni anche all'interno del libretto della Liturgia Nuziale.
+% 
+% L'opzione \texttt{comment} permette di inserire in automatico i commenti, l'opzione \texttt{nocomment}, che è caricata di default, inibisce la stampa dei commenti.
+%
+% I comandi che permettono di gestire l'aspetto dei commenti sono:
+%
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[commentindent] Comando che regola il rientro della prima riga dei commenti.
+% \Item[commentfont] Dichiarazione che gestisce la formattazione del testo dei commenti. Di default vale \verb!\footnotesize\itshape\color{commentcolor}! 
+% \end{description}
+%
+% \textbf{commentcolor} è definito come \verb!\definecolor{commentcolor}{rgb}{1,0,0}! 
+%
+% Tutti i comment sono scritti all'interno di un ambiente \textsf{mtrcomment}.
+%
+% \section{Testi giustificati a sinistra}
+%
+% Nei messali alcune preghiere vengono stampate con giustificazione a sinistra. Di default il pacchetto \textsf{matrita} stampa tutti i testi giustificati normalmente. Se si carica il pacchetto con l'opzione \texttt{leftjust} alcune preghiere verranno giustificate a sinistra. Il sistema non è molto flessibile. I punti in cui le righe vengono interrotte sono stati già definiti. Sarebbe stato possibile utilizzare un \verb!\begin{flushleft}!, ma in questo caso le righe sarebbero state troppo lunghe. Ci si accontenti di questo sistema.
+%
+% 
+%\section{Brani della Liturgia}
+% In questa sezione vengono riportati tutti i brani che si possono utilizzare nei Riti della celebrazione del Matrimonio.
+% \subsection*{Introduzione}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[introduzione] La liturgia prevede di poter scegliere fra tre
+% formule. Per richiamarle si usa il comando
+% \begin{verbatim}
+% \introduzione[n]
+% \end{verbatim} 
+% dove n deve essere
+% compreso fra 1 e 3, altrimenti il pacchetto restituisce un errore.
+% Se non si esplicita alcun argomento opzionale viene caricata
+% la prima formula.
+% \end{description}
+% Le formule utilizzabili sono:
+% \begin{formula}
+% \introduzione[1]
+% \end{formula}
+% \begin{formula}
+% \introduzione[2]
+% \end{formula}
+% \begin{formula}
+% \introduzione[3]
+% \end{formula}
+%
+% \subsection*{Memoria del Battesimo}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[membatt] La liturgia prevede una sola formula. Per richiamarla si usa il comando \cs{membatt} che produce il testo:
+% \end{description}
+% \begin{cella}
+% \membatt
+% \end{cella}
+% \subsection*{Colletta}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[colletta] La liturgia prevede di poter scegliere fra sei
+% formule. Per richiamarle si usa il comando
+% \begin{verbatim}\colletta[n]\end{verbatim} 
+% dove n deve essere
+% compreso fra 1 e 6, altrimenti il pacchetto restituisce un errore.
+% Se non si esplicita alcun argomento opzionale viene caricata
+% la prima formula.
+% \end{description}
+% Le formule utilizzabili sono:\setcounter{formulacount}{0}
+% \begin{formula}
+% \colletta[1]
+% \end{formula}
+% \begin{formula}
+% \colletta[2]
+% \end{formula}
+% \begin{formula}
+% \colletta[3]
+% \end{formula}
+% \begin{formula}
+% \colletta[4]
+% \end{formula}
+% \begin{formula}
+% \colletta[5]
+% \end{formula}
+% \vspace{-\baselineskip}
+% \begin{formula}
+% \colletta[6]
+% \end{formula}
+% \vspace{-2\baselineskip}
+% \subsection*{Introduzione al rito del Matrimonio}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[matrintro] La liturgia prevede di poter scegliere fra due
+% formule. Per richiamarle si usa il comando
+% \begin{verbatim}\matrintro[n]\end{verbatim} 
+% dove n deve essere
+% compreso fra 1 e 2, altrimenti il pacchetto restituisce un errore.
+% Se non si esplicita alcun argomento opzionale viene caricata
+% la prima formula.
+% \end{description}
+% Le formule utilizzabili sono:\setcounter{formulacount}{0}
+% \begin{formula}
+% \matrintro[1]
+% \end{formula}
+% \begin{formula}
+% \matrintro[2]
+% \end{formula}
+%
+% \subsection*{Manifestazione delle intenzioni}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[matrpre] La liturgia prevede di poter scegliere fra due
+% formule. Per richiamarle si usa il comando
+% \begin{verbatim}\matrpre[n]\end{verbatim} 
+% dove n deve essere
+% compreso fra 1 e 2, altrimenti il pacchetto restituisce un errore.
+% Se non si esplicita alcun argomento opzionale viene caricata
+% la prima formula.
+% \end{description}
+% Le formule utilizzabili sono:\setcounter{formulacount}{0}
+% \begin{formula}
+% \matrpre[1]
+% \end{formula}
+% \begin{formula}
+% \matrpre[2]
+% \end{formula}
+%
+%
+% \subsection*{Manifestazione del consenso}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[consintro] La liturgia prevede di poter scegliere fra due
+% formule. Per richiamarle si usa il comando
+% \begin{verbatim}\consintro[n]\end{verbatim} 
+% dove n deve essere
+% compreso fra 1 e 2, altrimenti il pacchetto restituisce un errore.
+% Se non si esplicita alcun argomento opzionale viene caricata
+% la prima formula.
+% \end{description}
+% Le formule utilizzabili sono:\setcounter{formulacount}{0}
+% \begin{formula}
+% \consintro[1]
+% \end{formula}
+% \begin{formula}
+% \consintro[2]
+% \end{formula}
+%
+% \subsection*{Promesse nuziali}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[promesse] La liturgia prevede di poter scegliere fra tre
+% formule. Per richiamarle si usa il comando
+% \begin{verbatim}\promesse[n]\end{verbatim} 
+% dove n deve essere
+% compreso fra 1 e 3, altrimenti il pacchetto restituisce un errore.
+% Se non si esplicita alcun argomento opzionale viene caricata
+% la prima formula.
+% \end{description}
+% Le formule utilizzabili sono:\setcounter{formulacount}{0}
+% \begin{formula}
+% \promesse[1]
+% \end{formula}
+% \begin{formula}
+% \promesse[2]
+% \end{formula}
+% \begin{formula}
+% \promesse[3]
+% \end{formula}
+%
+% \subsection*{Preghiere dopo il Rito}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[preghpost] La liturgia prevede di poter scegliere fra due
+% formule. Per richiamarle si usa il comando
+% \begin{verbatim}\preghpost[n]\end{verbatim} 
+% dove n deve essere
+% compreso fra 1 e 2, altrimenti il pacchetto restituisce un errore.
+% Se non si esplicita alcun argomento opzionale viene caricata
+% la prima formula.
+% \end{description}
+% Le formule utilizzabili sono:\setcounter{formulacount}{0}
+% \begin{formula}
+% \preghpost[1]
+% \end{formula}
+% \begin{formula}
+% \preghpost[2]
+% \end{formula}
+%
+% \subsection*{Benedizione degli anelli}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[benedizioneanelli] La liturgia prevede di poter scegliere fra quattro
+% formule. Per richiamarle si usa il comando
+% \begin{verbatim}\benedizioneanelli[n]\end{verbatim} 
+% dove n deve essere
+% compreso fra 1 e 4, altrimenti il pacchetto restituisce un errore.
+% Se non si esplicita alcun argomento opzionale viene caricata
+% la prima formula.
+% \end{description}
+% Le formule utilizzabili sono:\setcounter{formulacount}{0}
+% \begin{formula}
+% \benedizioneanelli[1]
+% \end{formula}
+% \begin{formula}
+% \benedizioneanelli[2]
+% \end{formula}
+% \begin{formula}
+% \benedizioneanelli[3]
+% \end{formula}
+% \begin{formula}
+% \benedizioneanelli[4]
+% \end{formula}
+%
+% \subsection*{Scambio degli anelli}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[consegnanello] La liturgia prevede una sola formula. Per richiamarla si usa il comando \cs{consegnanello} che produce il testo:
+% \end{description}
+% % \singolform{\consegnanello}
+%
+% \subsection*{Incoronazione}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[incoronazione] La liturgia prevede una sola formula. Per richiamarla si usa il comando \cs{incoronazione} che produce il testo:
+% \end{description}
+% 
+% % \singolform{\incoronazione}
+% 
+% \vspace{-1\baselineskip}
+% \subsection*{Introduzione alle preghiere dei fedeli}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[introfedeli] La liturgia prevede una sola formula. Per richiamarla si usa il comando \cs{introfedeli} che produce il testo:
+% \end{description}
+%
+% \singolform{\introfedeli}
+% \vspace{-1\baselineskip}
+% \subsection*{Preghiere dei fedeli}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[preghierefedeli] La liturgia prevede delle preghiere predefinite. Per richiamarle si usa il comando \cs{preghierefedeli} che produce il testo:
+% \end{description}
+% \singolform{\preghierefedeli}
+% 
+% Se gli sposi vorranno inserire delle preghiere diverse potranno farlo 
+% liberamente, o ridefinendo il comando \cs{mtr@fedelistandard} o scrivendole direttamente nel file del libretto.
+%
+% \subsection*{Litanie}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[introlitanie] L'introduzione “standard” delle litanie si richiama con il comando \cs{introlitanie} che produce il testo:
+% \end{description}
+% \singolform{\introlitanie}
+%
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[litanie] La liturgia prevede delle litanie predefinite. Per richiamarle si usa il comando \cs{litanie} che produce il testo:
+% \end{description}
+%
+% \singolform{\litanie}
+%
+% Si vede che in fondo vengono inseriti automaticamente i nomi
+% della sposa e dello sposo. 
+% 
+% Le litanie possono essere modificate ridefinendo il comando \cs{mtr@litanie}. 
+%
+% Per eliminare le invocazioni ai santi che portano i nomi dello sposo o della sposa o per inserire nuove voci si vedano i comandi descritti nella sezione~{\ref{sec:altricom}}.
+%
+%Per comporre le litanie si è usata una longtable.
+%
+% \subsection*{Preghiera sulle offerte}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[preghieraofferte] La liturgia prevede di poter scegliere fra tre
+% formule. Per richiamarle si usa il comando
+% \begin{verbatim}\preghieraofferte[n]\end{verbatim} 
+% dove n deve essere
+% compreso fra 1 e 3, altrimenti il pacchetto restituisce un errore.
+% Se non si esplicita alcun argomento opzionale viene caricata
+% la prima formula.
+% \end{description}
+% Le formule utilizzabili sono:\setcounter{formulacount}{0}
+% \begin{formula}
+% \preghieraofferte[1]
+% \end{formula}
+% \begin{formula}
+% \preghieraofferte[2]
+% \end{formula}
+% \begin{formula}
+% \preghieraofferte[3]
+% \end{formula}
+%
+% \subsection*{Prefazio}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[prefazio] La liturgia prevede una sola formula. Per richiamarla si usa il comando \cs{prefazio} che produce il testo:
+% \end{description}
+%
+% \singolform{\prefazio}
+%
+% \subsection*{Santo}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[santosanto] Solitamente si usa la Preghiera Eucaristica III. Per richiamare il testo del santo si usa il comando \cs{santosanto} che produce:
+% \end{description}
+%
+% \singolform{\santosanto}
+%
+% \subsection*{Preghiera Eucaristica}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[pregheucar] Per richiamare il testo della preghiera Eucaristica si usa il comando \cs{pregheucar} che produce il testo:
+% \end{description}
+%
+% \singolform{\pregheucar}
+%
+% \subsection*{Mistero della Fede}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[misterofede] La liturgia prevede di poter scegliere fra tre
+% formule. Per richiamarle si usa il comando
+% \begin{verbatim}\misterofede[n]\end{verbatim} 
+% dove n deve essere
+% compreso fra 1 e 3, altrimenti il pacchetto restituisce un errore.
+% Se non si esplicita alcun argomento opzionale viene caricata
+% la prima formula.
+% \end{description}
+% Le formule utilizzabili sono:\setcounter{formulacount}{0}
+% \begin{formula}
+% \misterofede[1]
+% \end{formula}
+% \begin{formula}
+% \misterofede[2]
+% \end{formula}
+% \begin{formula}
+% \misterofede[3]
+% \end{formula}
+%
+% \subsection*{Preghiera Eucaristica {segue} }
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[orazionieucar] È il seguito della Preghiera Eucaristica III. Per richiamarla si usa il comando \cs{orazionieucar} che produce il testo:
+% \end{description}
+%
+% \singolform{\orazionieucar}
+%
+% \subsection*{Benedizione degli sposi}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[benedizionesposi] La liturgia prevede di poter scegliere fra quattro
+% formule. Per richiamarle si usa il comando
+% \begin{verbatim}\benedizionesposi[n]\end{verbatim} 
+% dove n deve essere
+% compreso fra 1 e 4, altrimenti il pacchetto restituisce un errore.
+% Se non si esplicita alcun argomento opzionale viene caricata
+% la prima formula.
+% \end{description}
+% Le formule utilizzabili sono:\setcounter{formulacount}{0}
+% \begin{formula}
+% \benedizionesposi[1]
+% \end{formula}
+% \begin{formula}
+% \benedizionesposi[2]
+% \end{formula}
+% \begin{formula}
+% \benedizionesposi[3]
+% \end{formula}
+% \begin{formula}
+% \benedizionesposi[4]
+% \end{formula}
+%
+% \subsection*{Orazione dopo la comunione}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[preghierecomunione] La liturgia prevede di poter scegliere fra tre
+% formule. Per richiamarle si usa il comando
+% \begin{verbatim}\preghierecomunione[n]\end{verbatim} 
+% dove n deve essere
+% compreso fra 1 e 3, altrimenti il pacchetto restituisce un errore.
+% Se non si esplicita alcun argomento opzionale viene caricata
+% la prima formula.
+% \end{description}
+% Le formule utilizzabili sono:\setcounter{formulacount}{0}
+% \begin{formula}
+% \preghierecomunione[1]
+% \end{formula}
+% \begin{formula}
+% \preghierecomunione[2]
+% \end{formula}
+% \begin{formula}
+% \preghierecomunione[3]
+% \end{formula}
+%
+%
+% \subsection*{Benedizione finale}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[benedizionefinale] La liturgia prevede di poter scegliere fra tre
+% formule. Per richiamarle si usa il comando
+% \begin{verbatim}\benedizionefinale[n]\end{verbatim} 
+% dove n deve essere
+% compreso fra 1 e 3, altrimenti il pacchetto restituisce un errore.
+% Se non si esplicita alcun argomento opzionale viene caricata
+% la prima formula.
+% \end{description}
+% Le formule utilizzabili sono:\setcounter{formulacount}{0}
+% \begin{formula}
+% \benedizionefinale[1]
+% \end{formula}
+% \begin{formula}
+% \benedizionefinale[2]
+% \end{formula}
+% \begin{formula}
+% \benedizionefinale[3]
+% \end{formula}
+%
+% \subsection*{Congedo}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[congedo] La liturgia prevede una sola formula. Per richiamarla si usa il comando \cs{congedo} che produce il testo:
+% \end{description}
+% \singolform{\congedo}
+%
+% \subsection*{Articoli di legge}
+% \begin{description}\def\Item[#1]{\item[\itemlayout\cs{#1}]}
+% \Item[articolilegge] La liturgia prevede una sola formula. Per richiamarla si usa il comando \cs{articolilegge} che produce il testo:
+% \end{description}
+% \singolform{\articolilegge}
+%
+% \section{Considerazioni tipografiche}
+%
+% Assieme al pacchetto \pack{matrita} viene fornito il file \texttt{matrimonio.tex} che vuole essere un esempio di come si possono utilizzare i comandi del pacchetto.
+%
+% I libretti per le celebrazioni vengono solitamente prodotti in
+% formato A5, in modo da poter essere stampati come opuscolo su
+% carta A4. L'esempio allegato è prodotto in un formato più
+% stretto rispetto all'A5, in modo da conferire alla pagina
+% maggior snellezza (e arrivare a un rapporto fra i lati pari
+% alla sezione aurea). Il formato A5 è molto comodo da stampare,
+% ma purtroppo è anche uno dei peggiori (Tschichold ne “La forma
+% del libro” si è sbizzarrito definendolo “poco piacevole da
+% tenere in mano perché troppo largo, troppo ingombrante e poco
+% elegante” e ancora “fastidioso” e “particolarmente
+% sconsigliabile”. Va precisato però che lui parlava di “libri”,
+% non di libriccini per la Messa).
+%
+% A ogni modo si può giocare con la larghezza della pagina
+% per ottenere una forma più gradevole. Preziose indicazioni si possono trovare ne:
+% \begin{itemize}
+% \item \emph{La forma del libro} di Jan Tschichold
+% \item \emph{Gli elementi dello stile tipografico} di Robert Bringhurst
+% \item \emph{Introduzione alla definizione della geometria della pagina} di Claudio Beccari (scaricabile dal sito del \GuIT).
+% \end{itemize}
+% \section{Modifiche}
+% \begin{description}
+% \item[v 0.3] cambiato il nome di default del Papa, modificato spaziatura tabella litanie, ridefinito \respfont come dichiarazione perché possa essere usato nelle litanie. Corretto refusi nei testi.
+% \item[v 0.2] Aggiunte le opzioni \texttt{comment} e \texttt{nojustified} per stampare i commenti ai momenti liturgici e per lasciare il testo allineato a sinistra in alcune preghiere.
+% \item[v 0.1] Primo rilascio pubblico.
+% \end{description}
+% \StopEventually{\PrintChanges}
+% \section{Implementazione}
+% Pacchetti caricati
+%    \begin{macrocode}
+\RequirePackage{longtable}
+\RequirePackage{verse}
+\RequirePackage{harmony}
+\RequirePackage{xcolor}
+\RequirePackage{etoolbox}
+\RequirePackage{array}
+\RequirePackage{ifxetex}
+\RequirePackage{pict2e}
+\RequirePackage{textcomp}
+\RequirePackage{textcase}
+\RequirePackage{fourier-orns}
+\RequirePackage{xparse}
+\RequirePackage{amssymb}
+%    \end{macrocode}
+% Opzioni del pacchetto
+%    \begin{macrocode}
+\newif\ifmtr@cross
+\newif\ifmtr@figli
+\newif\ifmtr@comment
+\newif\ifmtr@leftjust
+\DeclareOption{cross}{\mtr@crosstrue}
+\DeclareOption{nocross}{\mtr@crossfalse}
+\DeclareOption{figli}{\mtr@figlitrue}
+\DeclareOption{nofigli}{\mtr@figlifalse}
+\DeclareOption{nocomment}{\mtr@commentfalse}
+\DeclareOption{comment}{\mtr@commenttrue}
+\DeclareOption{leftjust}{\mtr@leftjusttrue}
+\DeclareOption{noleftjust}{\mtr@leftjustfalse}
+\ExecuteOptions{cross,figli,nocomment,noleftjust} 
+\ProcessOptions*\relax
+%    \end{macrocode}
+% Colore dei simboli
+%    \begin{macrocode}
+\definecolor{grigio}{gray}{0.7}
+\definecolor{respcolor}{gray}{0.7}
+\definecolor{crosscolor}{rgb}{0.3,0,4.0.4}
+\definecolor{commentcolor}{rgb}{1,0,0}
+%    \end{macrocode}
+% Nomi degli sposi
+%    \begin{macrocode}
+\newcommand{\NSposa}{Giovanna}
+\newcommand{\NSposo}{Giovanni}
+\newcommand{\sposifont}[1]{\maiuscolettospaziato{#1}}
+\newcommand{\sposa}{\sposifont{\NSposa}}
+\newcommand{\sposo}{\sposifont{\NSposo}}
+%    \end{macrocode}
+% Comando per avere il maiuscoletto spaziato
+%    \begin{macrocode}
+\ifxetex
+ \newcommand{\maiuscolettospaziato}[1]{%
+  {\addfontfeature{LetterSpace=6}\textsc{\MakeTextLowercase{#1}}}}
+\else
+\RequirePackage{microtype}
+\newcommand{\maiuscolettospaziato}[1]{%
+ \textsc{\MakeTextLowercase{\textls[80]{#1}}}}
+\fi
+%    \end{macrocode}
+% Comando per segnare le parti della Messa
+%    \begin{macrocode}
+\newlength{\premomentoskip}
+ \setlength{\premomentoskip}{2.5ex plus 0.5ex minus 1ex}
+\newcommand{\momento}[1]{%
+ {\par\vspace{\premomentoskip}%
+ \noindent\LARGE\maiuscolettospaziato{#1}}%
+ \par\nobreak\bigskip%
+}
+%    \end{macrocode}
+% Risposte e invocazioni
+%    \begin{macrocode}
+\newcommand{\risposta}[1]{%
+ \par\nobreak\vspace{\prerisp}%
+ \noindent\respindent\ifmtr@comment{\commentfont{Gli Sposi rispondono:\ }}\fi{\respfont#1}\par%
+ \vspace{\postrisp}%
+}
+\newcommand{\rispostatutti}[1]{%
+ \par\nobreak\vspace{\prerisp}%
+ \noindent\respindent\respsym\ {\respfont#1}\par%
+ \vspace{\postrisp}%
+}	
+\newcommand{\textinvoc}[1]{%
+ \par\nobreak\vspace{\prerisp}
+ \noindent\respindent\invocsym\ #1}
+
+\newcommand{\respsym}{\Rrecipe}
+\newcommand{\Rrecipe}{\textcolor{respcolor}{%
+\setbox0\hbox{\textsc{r}}% da Carlo Stembergher, modificato
+\unitlength\ht0
+\picture(0,0)\linethickness{.075\unitlength}
+\polyline(0.65,-0.07)(1,0.5)
+\endpicture\box0}}
+
+\newcommand{\invocsym}{\textcolor{respcolor}{%
+\setbox0\hbox{\textsc{v}}%
+\unitlength\ht0
+\picture(0,0)\linethickness{.075\unitlength}
+\polyline(0.2,-0.2)(.65,1.2)
+\endpicture\box0}}
+
+\newlength{\prerisp}
+\setlength{\prerisp}{0.2\baselineskip}
+\newlength{\postrisp}
+\setlength{\postrisp}{0.4\baselineskip}
+\newcommand{\respindent}{\hspace{0pt}}
+\newcommand{\respfont}{\itshape}
+%    \end{macrocode}
+% Risposta alle preghiere dei fedeli
+%    \begin{macrocode}
+\newcommand{\rispostafedeli}[1][Ascoltaci, o Signore.]{#1} 
+%    \end{macrocode}
+% Canzoni
+%    \begin{macrocode}
+\renewcommand{\@vstypeptitle}[1]{% grazie a Barbara Beeton
+  \vspace{\beforepoemtitleskip}
+  {\noindent\poemtitlefont #1\par}\nobreak
+  \vspace{\afterpoemtitleskip}
+}
+
+\setlength{\leftmargini}{0em}
+\newlength{\titleindent}
+ \setlength{\titleindent}{0em}
+\newcommand{\mtr@titleindent}{\hspace{\titleindent}}
+%
+\newcommand{\canztitle}[1]{\poemtitle*{\mtr@titleindent\precanztitle#1\postcanztitle}}
+\newenvironment{canzone}{%
+\begin{verse}}%
+{\end{verse}}
+%
+\newcommand{\precanztitle}{\decothreeleft\ }
+\newcommand{\postcanztitle}{\ \decothreeright}
+\newenvironment{ritornello}{\ritfont}{}
+\newcommand{\ritfont}{\itshape}
+%    \end{macrocode}
+% Letture e Vangelo (da Enrico Gregorio)
+%    \begin{macrocode}
+\newcommand{\chiusura}[1]{%
+  \par\nobreak\smallskip
+  \ifx#1v%
+    Parola del Signore\rispostatutti{Lode a te o Cristo}
+  \else
+    Parola di Dio\rispostatutti{Rendiamo grazie a Dio}
+  \fi}
+\NewDocumentEnvironment{lettura}{ o m m }
+ {\par\medskip
+  \IfNoValueTF{#1}{}{\noindent\intestfont{#1 lettura}\\*[.5ex]}
+  \noindent\nomelibrofont{#2}\hspace{1em}%
+  {\rifbibfont{(#3)}}\par\nobreak\smallskip}
+  {\chiusura{a}  
+ }
+\NewDocumentEnvironment{vangelo}{o m m }
+  {\par\medskip
+   \IfNoValueTF{#1}{}{\noindent\intestfont{#1}\\*[.5ex]}
+   \noindent\cross\nomelibrofont{Dal Vangelo secondo #2}\hspace{1em}%
+   {\rifbibfont{(#3)}}\par\nobreak\smallskip}
+  {\chiusura{v}\postvangelocomment}
+\newcommand{\mtrskip}{\medskip}
+\newcommand{\intestfont}[1]{{\large\textit{#1}}}
+\newcommand{\nomelibrofont}[1]{{\textsc{#1}}}
+\newcommand{\rifbibfont}{\small\textsc}
+\newcommand{\versettosalmo}{}
+\newcommand{\rispostasalmo}{\nobreak\smallskip\respsym\ {\respfont\versettosalmo}}
+%    \end{macrocode}
+% Comandi per gestire i nomi dei santi nelle litanie,
+% riconosce se il nome dello sposo inizia con una vocale
+% o una consonante e sceglie di conseguenza Sant' o San.
+%    \begin{macrocode}
+\newcommand{\Santo}[1]{%
+\expandafter\@santo#1}
+\def\@santo{\futurelet\next\@firstvocalverify}
+\def\@vocaltrue{Sant'}
+\def\@vocalfalse{San~}
+\def\@firstvocalverify{%
+  \ifx\next A%
+    \@vocaltrue
+  \else
+   \ifx\next E%
+    \@vocaltrue
+   \else
+    \ifx\next I%
+     \@vocaltrue
+    \else
+     \ifx\next O%
+      \@vocaltrue
+     \else
+      \ifx\next U%
+       \@vocaltrue
+      \else
+       \@vocalfalse
+      \fi
+     \fi
+    \fi
+   \fi
+  \fi}
+\newcommand{\personallitania}{}
+\newcommand{\litasposo}{\Santo{\NSposo}, & prega per noi\\}
+\newcommand{\litasposa}{Santa \NSposa, & prega per noi\\}
+\newcommand{\litachiesa}{}
+\newcommand{\miosanto}{}
+\def\@miosanto{%
+\if\miosanto
+  \else
+ ,\ \miosanto
+\fi}
+\newcommand{\nomevescovo}{NomeVescovo}
+\newcommand{\nomepapa}{Francesco}
+\newcommand{\cross}{\ifmtr@cross\textcolor{crosscolor}{{\footnotesize\maltese}}\ \fi}
+\newcommand{\consacrazfont}{\large}
+\newcommand{\crossep}{\ifmtr@cross\hspace{0.5em}\fi}
+\newcommand{\commentindent}{\noindent}
+\newcommand{\commentfont}{\footnotesize\itshape\color{commentcolor}}
+\newenvironment{mtrcomment}{\par\smallskip\commentindent\commentfont}
+{\ignorespacesafterend\par\nobreak\smallskip\nobreak}
+\newcommand{\mtr@endline}{\ifmtr@leftjust\\\else{ }\fi}
+\newenvironment{justpregh}{\ifmtr@leftjust\setlength{\parindent}{0pt}%
+\bgroup\obeylines\fi}{\ifmtr@leftjust\egroup\fi}
+%    \end{macrocode}
+% Comandi per richiamare i brani della Liturgia
+%    \begin{macrocode}
+\newcommand{\segnocrocecomment}{%
+\ifmtr@comment\begin{mtrcomment}\mtr@segnocrocecomment\end{mtrcomment}\fi}
+\newcommand{\segnocroce}{\mtr@segnocroce}
+\newcommand{\introcomment}{\ifmtr@comment\begin{mtrcomment}%
+ \mtr@introcomment\end{mtrcomment}\fi}
+\newcommand\introduzione[1][1]{%
+ \ifnumcomp{#1}{=}{1}{\mtr@introi}{%
+  \ifnumcomp{#1}{=}{2}{\mtr@introii}{%
+   \ifnumcomp{#1}{=}{3}{\mtr@introiii}{\errmessage{%
+   L'argomento del comando deve essere compreso fra 1 e 3}}}}
+}
+\newcommand{\baptmemcommenti}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@baptmemcommenti\end{mtrcomment}\fi}
+\newcommand{\baptmemcommentii}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@baptmemcommentii\end{mtrcomment}\fi}
+\newcommand{\baptmemcommentiii}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@baptmemcommentiii\end{mtrcomment}\fi}
+\newcommand{\membatt}{\mtr@baptmem}
+\newcommand{\gloria}{\mtr@gloria}
+\newcommand\colletta[1][1]{%
+ \ifnumcomp{#1}{=}{1}{\mtr@collettai}{%
+  \ifnumcomp{#1}{=}{2}{\mtr@collettaii}{%
+   \ifnumcomp{#1}{=}{3}{\mtr@collettaiii}{%
+    \ifnumcomp{#1}{=}{4}{\mtr@collettaiv}{%
+     \ifnumcomp{#1}{=}{5}{\mtr@collettav}{%
+      \ifnumcomp{#1}{=}{6}{\mtr@collettavi}{\errmessage{%
+       L'argomento del comando deve essere compreso fra 1 e 6}}}}}}}
+}
+
+\newcommand{\postvangelocomment}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@postvangelocomment\end{mtrcomment}\fi}
+\newcommand{\matrintrocomment}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@matrintrocomment\end{mtrcomment}\fi}
+\newcommand\matrintro[1][1]{%
+ \ifnumcomp{#1}{=}{1}{\mtr@matrintroi}{%
+  \ifnumcomp{#1}{=}{2}{\mtr@matrintroii}{\errmessage{%
+  L'argomento del comando deve essere compreso fra 1 e 2}}}
+}
+\newcommand{\matrprecommenti}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@matrprecommenti\end{mtrcomment}\fi}
+\newcommand{\matrprecommentii}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@matrprecommentii\end{mtrcomment}\fi}
+
+\newcommand\matrpre[1][1]{%
+ \ifnumcomp{#1}{=}{1}{\mtr@matrprei}{%
+  \ifnumcomp{#1}{=}{2}{\mtr@matrpreii}{\errmessage{%
+  L'argomento del comando deve essere compreso fra 1 e 2}}}
+}
+\newcommand{\consintrocommenti}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@consintrocommenti\end{mtrcomment}\fi}
+\newcommand{\consintrocommentii}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@consintrocommentii\end{mtrcomment}\fi}
+\newcommand\consintro[1][1]{%
+ \ifnumcomp{#1}{=}{1}{\mtr@consintroi}{%
+  \ifnumcomp{#1}{=}{2}{\mtr@consintroii}{\errmessage{%
+  L'argomento del comando deve essere compreso fra 1 e 2}}}
+}
+\newcommand\promesse[1][1]{%
+ \ifnumcomp{#1}{=}{1}{\mtr@matri}{%
+  \ifnumcomp{#1}{=}{2}{\mtr@matrii}{%
+   \ifnumcomp{#1}{=}{3}{\mtr@matriii}{\errmessage{%
+   L'argomento del comando deve essere compreso fra 1 e 3}}}}
+}
+\newcommand{\accconscomment}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@accconscomment\end{mtrcomment}\fi}
+\newcommand\preghpost[1][1]{%
+ \ifnumcomp{#1}{=}{1}{\mtr@accconsi}{%
+  \ifnumcomp{#1}{=}{2}{\mtr@accconsii}{\errmessage{%
+  L'argomento del comando deve essere compreso fra 1 e 2}}}
+}
+\newcommand{\benanellicommenti}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@benanellicommenti\end{mtrcomment}\fi}
+\newcommand{\benanellicommentii}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@benanellicommentii\end{mtrcomment}\fi}
+\newcommand\benedizioneanelli[1][1]{%
+ \ifnumcomp{#1}{=}{1}{\mtr@benanelli}{%
+  \ifnumcomp{#1}{=}{2}{\mtr@benanellii}{%
+   \ifnumcomp{#1}{=}{3}{\mtr@benanelliii}{%
+    \ifnumcomp{#1}{=}{4}{\mtr@benanelliv}{\errmessage{%
+    L'argomento del comando deve essere compreso fra 1 e 4}}}}}
+}
+
+\newcommand{\consanellcommento}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@consanellcommento\end{mtrcomment}\fi}
+\newcommand{\consanellcommenta}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@consanellcommenta\end{mtrcomment}\fi}
+\newcommand{\consegnanello}{\mtr@consanell}
+
+\newcommand{\incoronazionecommenti}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@incoronazionecommenti\end{mtrcomment}\fi}
+\newcommand{\incoronazionecommentii}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@incoronazionecommentii\end{mtrcomment}\fi}
+\newcommand{\incoronazione}{\mtr@incoronazione}
+
+\newcommand{\introfedeli}{\mtr@fedelintro}
+\newcommand{\preghierefedeli}{\mtr@fedelistandard}
+\newcommand{\introlitaniecomment}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@introlitaniecomment\end{mtrcomment}\fi}
+\newcommand{\introlitanie}{\mtr@introlitanie}
+\newcommand{\postlitaniecomment}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@postlitaniecomment\end{mtrcomment}\fi}
+\newcommand{\litanie}{\mtr@litanie}
+\newcommand{\credo}{\mtr@credo}
+
+\newcommand\preghieraofferte[1][1]{%
+ \ifnumcomp{#1}{=}{1}{\mtr@offertei}{%
+  \ifnumcomp{#1}{=}{2}{\mtr@offerteii}{%
+   \ifnumcomp{#1}{=}{3}{\mtr@offerteiii}{\errmessage{%
+   L'argomento del comando deve essere compreso fra 1 e 3}}}}
+}
+\newcommand{\prefazio}{\mtr@presanto}
+\newcommand{\santosanto}{\mtr@santo}
+\newcommand{\pregheucar}{\mtr@pregheucar}
+
+\newcommand{\misterofede}[1][1]{%
+ \ifnumcomp{#1}{=}{1}{\rispostatutti{\mtr@mistfedei}}{%
+  \ifnumcomp{#1}{=}{2}{\rispostatutti{\mtr@mistfedeii}}{%
+   \ifnumcomp{#1}{=}{3}{\rispostatutti{\mtr@mistfedeiii}}{\errmessage{%
+   L'argomento del comando deve essere compreso fra 1 e 3}}}}
+}
+\newcommand{\orazionieucar}{\mtr@orazioneucar}
+
+\newcommand{\benedizsposcommenti}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@benedizsposcommenti\end{mtrcomment}\fi}
+\newcommand{\benedizsposcommentii}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@benedizsposcommentii\end{mtrcomment}\fi}
+\newcommand\benedizionesposi[1][1]{%
+ \ifnumcomp{#1}{=}{1}{\mtr@benedizsposi}{%
+  \ifnumcomp{#1}{=}{2}{\mtr@benedizsposii}{%
+   \ifnumcomp{#1}{=}{3}{\mtr@benedizsposiii}{%
+    \ifnumcomp{#1}{=}{4}{\mtr@benedizsposiv}{\errmessage{%
+    L'argomento del comando deve essere compreso fra 1 e 4}}}}}
+}
+
+\newcommand\preghierecomunione[1][1]{%
+ \ifnumcomp{#1}{=}{1}{\mtr@preghcomui}{%
+  \ifnumcomp{#1}{=}{2}{\mtr@preghcomuii}{%
+   \ifnumcomp{#1}{=}{3}{\mtr@preghcomuiii}{\errmessage{%
+   L'argomento del comando deve essere compreso fra 1 e 3}}}}
+}
+
+\newcommand{\benedizfincomment}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@benedizfincomment\end{mtrcomment}\fi}
+\newcommand\benedizionefinale[1][1]{%
+ \ifnumcomp{#1}{=}{1}{\mtr@prebenedizfin\mtr@bendizfini}{%
+  \ifnumcomp{#1}{=}{2}{\mtr@prebenedizfin\mtr@bendizfinii}{%
+   \ifnumcomp{#1}{=}{3}{\mtr@prebenedizfin\mtr@bendizfiniii}{\errmessage{%
+   L'argomento del comando deve essere compreso fra 1 e 3}}}}
+}
+\newcommand{\congedocomment}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@congedocomment\end{mtrcomment}\fi}
+\newcommand{\congedo}{\mtr@congedo}
+
+\newcommand{\articolicomment}{%
+ \ifmtr@comment\begin{mtrcomment}\mtr@articolicomment\end{mtrcomment}\fi}
+\newcommand{\articolilegge}{\mtr@articoli}
+%    \end{macrocode}
+% \subsection*{Testi}
+% Di seguito si riportano i testi dei riti propri della celebrazione del Matrimonio.
+% Sono stati presi dal sito \url{http://www.liturgia.maranatha.it/Matrimonio/coverpage.htm} e dal libretto “La messa degli Sposi”, Edizioni San Paolo, 2008.
+%    \begin{macrocode}
+
+\newcommand{\mtr@segnocrocecomment}{%
+Il sacerdote saluta l'assemblea con queste parole o altre simili:}
+\newcommand{\mtr@segnocroce}{%
+Nel nome del Padre, del Figlio\mtr@endline
+e dello Spirito Santo.
+\rispostatutti{Amen.}
+
+\segnocrocecomment
+La grazia del Signore nostro Gesù Cristo,\mtr@endline 
+l'amore di Dio Padre\mtr@endline
+e la comunione dello Spirito Santo\mtr@endline 
+sia con tutti voi.
+\rispostatutti{E con il tuo spirito.}}
+\newcommand{\mtr@introcomment}{%
+Per disporre gli sposi e i presenti alla celebrazione del Matrimonio, 
+il sacerdote invita a far memoria del Battesimo, con queste e simili parole:}
+
+\newcommand\mtr@introi{%
+\introcomment
+Fratelli e sorelle,\mtr@endline
+ci siamo riuniti con gioia nella casa del Signore\mtr@endline
+nel giorno in cui \sposa{} e \sposo{}\mtr@endline
+intendono formare la loro famiglia.\mtr@endline
+In quest'ora di particolare grazia\mtr@endline
+siamo loro vicini con l'affetto,\mtr@endline
+con l'amicizia e la preghiera fraterna.\mtr@endline
+Ascoltiamo attentamente insieme con loro\mtr@endline
+la Parola che Dio oggi ci rivolge.\mtr@endline
+In unione con la santa Chiesa\mtr@endline
+supplichiamo Dio Padre,\mtr@endline
+per Cristo Signore nostro,\mtr@endline
+perché benedica questi suoi figli\mtr@endline
+che stanno per celebrare il loro Matrimonio,\mtr@endline
+li accolga nel suo amore\mtr@endline
+e li costituisca in unità.
+
+Facciamo ora memoria del Battesimo,\mtr@endline
+nel quale siamo rinati a vita nuova.\mtr@endline
+Divenuti figli nel Figlio,\mtr@endline
+riconosciamo con gratitudine il dono ricevuto,\mtr@endline
+per rimanere fedeli all'amore a cui siamo stati chiamati.%
+}
+\newcommand\mtr@introii{%
+\introcomment
+\sposa{} e \sposo,\mtr@endline
+la Chiesa partecipa alla vostra gioia\mtr@endline
+e insieme con i vostri cari\mtr@endline
+vi accoglie con grande affetto\mtr@endline
+nel giorno in cui davanti a Dio, nostro Padre,\mtr@endline
+decidete di realizzare la comunione di tutta la vita.\mtr@endline
+In questo giorno per voi di festa\mtr@endline
+il Signore vi ascolti.\mtr@endline
+Mandi dal cielo il suo aiuto e vi custodisca.\mtr@endline
+Realizzi i desideri del vostro cuore\mtr@endline
+ed esaudisca le vostre preghiere.
+
+Riconoscenti per essere divenuti figli nel Figlio,\mtr@endline
+facciamo ora memoria del Battesimo,\mtr@endline
+dal quale, come da seme fecondo,\mtr@endline
+nasce e prende vigore l'impegno\mtr@endline
+di vivere fedeli nell'amore.%
+}
+\newcommand\mtr@introiii{%
+\introcomment
+Carissimi,\mtr@endline
+celebriamo il grande mistero\mtr@endline
+dell'amore di Cristo per la sua Chiesa.\mtr@endline
+Oggi \sposa{} e \sposo{} sono chiamati a parteciparvi\mtr@endline
+con il loro Matrimonio.
+
+Riconoscenti per essere divenuti figli nel Figlio,\mtr@endline
+facciamo ora memoria del Battesimo,\mtr@endline
+inizio della vita nuova nella fede,\mtr@endline
+sorgente e fondamento di ogni vocazione.\mtr@endline
+Dio nostro Padre,\mtr@endline
+con la forza del suo Santo Spirito,\mtr@endline
+ravvivi in tutti noi il dono\mtr@endline
+di quella benedizione originaria.%
+}
+\newcommand{\mtr@baptmemcommenti}{%
+Dopo l'invito iniziale, il sacerdote rimane in piedi alla sede, 
+rivolto verso il popolo. Alcuni ministranti portano dinanzi a lui l'acqua benedetta. 
+Quindi si ringrazia per il dono del Battesimo.
+Dove è possibile, la memoria del Battesimo avviene presso il fonte battesimale.}
+\newcommand{\mtr@baptmemcommentii}{Il sacerdote continua:}
+\newcommand{\mtr@baptmemcommentiii}{%
+Il sacerdote segna sé stesso con l'acqua benedetta, 
+poi asperge gli sposi e l'assemblea dei fedeli.}
+\newcommand\mtr@baptmem{%
+Padre,\mtr@endline
+nel Battesimo del tuo Figlio Gesù al fiume Giordano\mtr@endline
+hai rivelato al mondo l'amore sponsale\mtr@endline per il tuo popolo.
+\rispostatutti{Noi ti lodiamo e ti rendiamo grazie.}
+
+Cristo Gesù,\mtr@endline
+dal tuo costato aperto sulla Croce\mtr@endline
+hai generato la Chiesa,
+tua diletta sposa.
+\rispostatutti{Noi ti lodiamo e ti rendiamo grazie.}
+
+Spirito Santo,\mtr@endline
+potenza del Padre e del Figlio,\mtr@endline
+oggi fai risplendere\mtr@endline in \sposa{} e \sposo{}\mtr@endline
+la veste nuziale della Chiesa.
+\rispostatutti{Noi ti lodiamo e ti rendiamo grazie.}
+
+\baptmemcommentii
+Dio onnipotente,\mtr@endline
+origine e fonte della vita,\mtr@endline
+che ci hai rigenerati nell'acqua\mtr@endline
+con la potenza del tuo Spirito,\mtr@endline
+ravviva in tutti noi la grazia del Battesimo,\mtr@endline
+e concedi a \sposa{} e \sposo{}\mtr@endline un cuore libero e una fede ardente\mtr@endline
+perché, purificati nell'intimo,\mtr@endline
+accolgano il dono del Matrimonio,\mtr@endline
+nuova via della loro santificazione.
+
+Per Cristo nostro Signore.
+\rispostatutti{Amen.}
+
+\baptmemcommentiii%
+}
+\newcommand{\mtr@gloria}{%
+Gloria a Dio nell'alto dei cieli,\\
+e pace in terra agli uomini di buona volontà.\\
+Noi ti lodiamo, ti benediciamo,\\ 
+ti adoriamo, ti glorifichiamo,\\ 
+ti rendiamo grazie per la tua gloria immensa,\\
+Signore Dio, Re del cielo, Dio Padre onnipotente.\\
+Signore, Figlio unigenito, Gesù Cristo,\\ 
+Signore Dio, Agnello di Dio, Figlio del Padre:\\ 
+tu che togli i peccati del mondo, abbi pietà di noi;\\
+tu che togli i peccati del mondo,\\ accogli la nostra supplica;\\
+tu che siedi alla destra del Padre, abbi pietà di noi.\\
+Perché tu solo il Santo, tu solo il Signore,\\ 
+tu solo l'Altissimo:\\ Gesù Cristo con lo Spirito Santo\\ 
+nella gloria di Dio Padre.
+\rispostatutti{Amen.}
+}
+\newcommand\mtr@collettai{%
+O Dio, che in questo grande sacramento hai consacrato il patto coniugale,
+per rivelare nell'unione degli sposi il mistero di Cristo e della Chiesa, 
+concedi a \sposa{} e \sposo{} di esprimere nella vita il dono che ricevono nella fede. 
+Per il nostro Signore Gesù Cristo, tuo Figlio, che è Dio, e vive e regna con te, 
+nell'unità dello Spirito Santo, per tutti i secoli dei secoli. \rispostatutti{Amen.}
+}
+\newcommand\mtr@collettaii{%
+O Dio, che fin dagli inizi della creazione hai voluto l'unità fra l'uomo e la donna,
+congiungi con il vincolo di un solo amore questi tuoi figli, 
+che oggi si uniscono in matrimonio, e fa' che siano testimoni 
+di quella carità che hai loro donato. Per il nostro Signore Gesù Cristo, 
+tuo Figlio, che è Dio, e vive e regna con te, nell'unità dello Spirito Santo, 
+per tutti i secoli dei secoli. \rispostatutti{Amen.}
+}
+
+\newcommand\mtr@collettaiii{%
+Ascolta, Signore, la nostra preghiera ed effondi con bontà la tua grazia 
+su \sposa{} e \sposo, perché, unendosi davanti al tuo altare, 
+siano confermati nel reciproco amore. Per il nostro Signore Gesù Cristo, 
+tuo Figlio, che è Dio, e vive e regna con te, nell'unità dello Spirito Santo, 
+per tutti i secoli dei secoli. \rispostatutti{Amen.}
+}
+\newcommand\mtr@collettaiv{%
+Dio onnipotente, concedi a \sposa{} e \sposo, che oggi consacrano il loro amore, 
+di crescere insieme nella fede che professano davanti a te, 
+e di arricchire con i loro figli la tua Chiesa. Per il nostro Signore Gesù Cristo, 
+tuo Figlio, che è Dio, e vive e regna con te, 
+nell'unità dello Spirito Santo, per tutti i secoli dei secoli. \rispostatutti{Amen.}
+}
+\newcommand\mtr@collettav{%
+Ascolta, o Signore, la nostra preghiera e sostieni 
+con il tuo amore il vincolo del matrimonio che tu stesso hai istituito 
+per la crescita del genere umano, perché l'unione che da te ha origine, 
+da te sia custodita. Per il nostro Signore Gesù Cristo, tuo Figlio, 
+che è Dio, e vive e regna con te, nell'unità dello Spirito Santo, 
+per tutti i secoli dei secoli. \rispostatutti{Amen.}
+}
+
+\newcommand\mtr@collettavi{%
+O Dio, che dall'inizio del mondo benedici l'uomo e la donna 
+con la grazia della fecondità, accogli la nostra preghiera: 
+scenda la tua benedizione su \sposa{} e \sposo, tuoi figli, 
+perché, nel loro matrimonio, siano uniti nel reciproco amore, 
+nell'unico progetto di vita, nel comune cammino di santità. 
+Per il nostro Signore Gesù Cristo, tuo Figlio, che è Dio, 
+e vive e regna con te, nell'unità dello Spirito Santo, 
+per tutti i secoli dei secoli. \rispostatutti{Amen.}
+}
+\newcommand{\mtr@postvangelocomment}{%
+Il sacerdote, o il diacono che ha proclamato il Vangelo, 
+bacia per primo l’Evangeliario e quindi lo porta agli sposi 
+invitando anch'essi a venerarlo.}
+
+\newcommand{\mtr@matrintrocomment}{%
+Terminata l'omelia e dopo qualche momento di silenzio, gli sposi, 
+i testimoni e tutti i presenti si alzano in piedi. 
+Quindi, il sacerdote si rivolge agli sposi con queste o altre simili parole:}
+\newcommand\mtr@matrintroi{%
+\matrintrocomment
+Carissimi\mtr@endline \sposa{} e \sposo,\mtr@endline
+siete venuti insieme nella casa del Padre,\mtr@endline
+perché la vostra decisione di unirvi in Matrimonio\mtr@endline
+riceva il suo sigillo e la sua consacrazione,\mtr@endline
+davanti al ministro della Chiesa\mtr@endline e davanti alla comunità.\mtr@endline
+Voi siete già consacrati mediante il Battesimo:\mtr@endline
+ora Cristo vi benedice e vi rafforza\mtr@endline con il sacramento nuziale,\mtr@endline
+perché vi amiate l'un l'altro\mtr@endline con amore fedele e inesauribile\mtr@endline
+e assumiate responsabilmente\mtr@endline i doveri del Matrimonio.
+
+Pertanto vi chiedo di esprimere\mtr@endline 
+davanti alla Chiesa le vostre intenzioni.%
+}
+
+\newcommand\mtr@matrintroii{%
+\matrintrocomment
+Carissimi \sposa{} e \sposo,\mtr@endline
+siete venuti nella casa del Signore,\mtr@endline
+davanti al ministro della Chiesa e davanti alla comunità,\mtr@endline
+perché la vostra decisione di unirvi in Matrimonio\mtr@endline
+riceva il sigillo dello Spirito Santo,\mtr@endline
+sorgente dell'amore fedele e inesauribile.\mtr@endline
+Ora Cristo vi rende partecipi dello stesso amore\mtr@endline
+con cui egli ha amato la sua Chiesa,\mtr@endline
+fino a dare sé stesso per lei.
+
+Vi chiedo pertanto di esprimere le vostre intenzioni.%
+}
+\newcommand{\mtr@matrprecommenti}{%
+Il sacerdote interroga gli sposi sulla libertà, 
+sulla fedeltà e sull'accoglienza ed educazione dei figli 
+e ciascuno personalmente risponde.
+}
+\newcommand{\mtr@matrprecommentii}{%
+Gli sposi possono dichiarare le loro intenzioni circa la libertà, 
+la fedeltà, l'accoglienza e l'educazione dei figli 
+pronunciando insieme la seguente formula:
+}
+
+\newcommand\mtr@matrprei{%
+\matrprecommenti
+\sposa{} e \sposo,\mtr@endline
+siete venuti a celebrare il Matrimonio\mtr@endline
+senza alcuna costrizione,\mtr@endline in piena libertà e consapevoli\mtr@endline
+del significato della vostra decisione?
+\risposta{Sì.}
+
+Siete disposti, seguendo la via del Matrimonio,\mtr@endline
+ad amarvi e a onorarvi l'un l'altro per tutta la vita?
+\risposta{Sì.}
+\ifmtr@figli
+
+Siete disposti ad accogliere con amore\mtr@endline
+i figli che Dio vorrà donarvi\mtr@endline
+e a educarli secondo la legge di Cristo\mtr@endline e della sua Chiesa?
+\risposta{Sì.}\fi%
+}
+
+\newcommand\mtr@matrpreii{%
+\matrprecommenti
+Compiuto il cammino del fidanzamento,\mtr@endline
+illuminati dallo Spirito Santo\mtr@endline
+e accompagnati dalla comunità cristiana,\mtr@endline
+siamo venuti in piena libertà\mtr@endline
+nella casa del Padre\mtr@endline
+perché il nostro amore riceva il sigillo di consacrazione.
+
+Consapevoli della nostra decisione,\mtr@endline
+siamo disposti,\mtr@endline
+con la grazia di Dio,\mtr@endline
+ad amarci e sostenerci l'un l'altro\mtr@endline
+per tutti i giorni della vita.
+\ifmtr@figli
+
+Ci impegniamo ad accogliere con amore i figli\mtr@endline
+che Dio vorrà donarci\mtr@endline
+e a educarli secondo la Parola di Cristo\mtr@endline
+e l'insegnamento della Chiesa.
+\fi
+
+Chiediamo a voi, fratelli e sorelle,\mtr@endline
+di pregare con noi e per noi\mtr@endline
+perché la nostra famiglia\mtr@endline
+diffonda nel mondo luce, pace e gioia.%
+}
+\newcommand{\mtr@consintrocommenti}{%
+Il sacerdote invita gli sposi a rivolgersi l'uno verso l'altro e ad esprimere il consenso.}
+\newcommand{\mtr@consintrocommentii}{%
+Gli sposi si danno la mano destra.}
+\newcommand\mtr@consintroi{%
+\consintrocommenti
+Se dunque è vostra intenzione\mtr@endline unirvi in Matrimonio,\mtr@endline
+datevi la mano destra\mtr@endline
+ed esprimete davanti a Dio e alla sua Chiesa\mtr@endline
+il vostro consenso.
+
+\consintrocommentii
+}
+\newcommand\mtr@consintroii{%
+\consintrocommenti
+Alla presenza di Dio\mtr@endline
+e davanti alla Chiesa qui riunita,\mtr@endline
+datevi la mano destra ed esprimete il vostro consenso.\mtr@endline
+Il Signore, inizio e compimento del vostro amore,\mtr@endline
+sia con voi sempre.
+
+\consintrocommentii
+}
+\newcommand\mtr@matri{%
+\ifmtr@comment\commentindent{%
+\commentfont Lo sposo si rivolge alla sposa con queste parole:\par}\fi
+Io \sposo,\mtr@endline accolgo te, \sposa,\mtr@endline come mia sposa.\mtr@endline
+Con la grazia di Cristo\mtr@endline
+prometto di esserti fedele sempre,\mtr@endline
+nella gioia e nel dolore,\mtr@endline
+nella salute e nella malattia,\mtr@endline
+e di amarti e onorarti\mtr@endline
+tutti i giorni della mia vita.
+
+\mtrskip
+\ifmtr@comment\commentindent{\commentfont{%
+La sposa si rivolge allo sposo con queste parole:}\par}\fi
+Io \sposa,\mtr@endline accolgo te, \sposo,\mtr@endline come mio sposo.\mtr@endline
+Con la grazia di Cristo\mtr@endline
+prometto di esserti fedele sempre,\mtr@endline
+nella gioia e nel dolore,\mtr@endline
+nella salute e nella malattia,\mtr@endline
+e di amarti e onorarti\mtr@endline
+tutti i giorni della mia vita.%
+}
+
+\newcommand\mtr@matrii{%
+\ifmtr@comment\commentindent{\commentfont{Sposo:}\par}\fi
+\sposa, vuoi unire la tua vita alla mia,\mtr@endline
+nel Signore che ci ha creati e redenti?
+\risposta{Sì, con la grazia di Dio, lo voglio.}
+
+\mtrskip
+\ifmtr@comment\commentindent{\commentfont{Sposa:}\par}\fi
+\sposo, vuoi unire la tua vita alla mia,\mtr@endline
+nel Signore che ci ha creati e redenti?
+\risposta{Sì, con la grazia di Dio, lo voglio.}
+
+\mtrskip
+\ifmtr@comment\commentindent{\commentfont{Insieme:}\par}\fi
+Noi promettiamo di amarci fedelmente,\mtr@endline
+nella gioia e nel dolore,\mtr@endline
+nella salute e nella malattia,\mtr@endline
+e di sostenerci l'un l'altro tutti i giorni della nostra vita.%
+}
+\newcommand\mtr@matriii{%
+\ifmtr@comment\commentindent{\commentfont{%
+Il sacerdote, se per motivi pastorali lo ritiene opportuno, 
+può richiedere il consenso in forma di domanda. 
+Interroga prima lo sposo:\endgraf}}\fi
+\sposo,\mtr@endline vuoi accogliere \sposa{} come tua sposa nel Signore,\mtr@endline
+promettendo di esserle fedele sempre,\mtr@endline
+nella gioia e nel dolore,\mtr@endline
+nella salute e nella malattia,\mtr@endline
+e di amarla e onorarla\mtr@endline
+tutti i giorni della tua vita?
+\risposta{Sì.}
+
+\mtrskip
+\ifmtr@comment\commentindent{\commentfont{Quindi interroga la sposa:}
+\par}\fi
+\sposa,\mtr@endline vuoi accogliere \sposo{} come tuo sposo nel Signore,\mtr@endline
+promettendo di essergli fedele sempre,\mtr@endline
+nella gioia e nel dolore,\mtr@endline
+nella salute e nella malattia,\mtr@endline
+e di amarlo e onorarlo\mtr@endline
+tutti i giorni della tua vita?
+\risposta{Sì.}%
+}
+\newcommand{\mtr@accconscomment}{%
+Il sacerdote, stendendo la mano sulle mani unite degli sposi, dice:}
+\newcommand{\mtr@accconsi}{%
+\accconscomment
+Il Signore onnipotente e misericordioso\mtr@endline
+confermi il consenso\mtr@endline
+che avete manifestato davanti alla Chiesa\mtr@endline
+e vi ricolmi della sua benedizione.\mtr@endline
+L'uomo non osi separare ciò che Dio unisce.
+\rispostatutti{Amen.}
+}
+\newcommand{\mtr@accconsii}{%
+\accconscomment
+Il Dio di Abramo,\mtr@endline
+il Dio di Isacco,\mtr@endline
+il Dio di Giacobbe,\mtr@endline
+il Dio che nel paradiso ha unito Adamo ed Eva\mtr@endline
+confermi in Cristo\mtr@endline
+il consenso che avete manifestato davanti alla Chiesa\mtr@endline
+e vi sostenga con la sua benedizione.\mtr@endline
+L'uomo non osi separare ciò che Dio unisce.
+\rispostatutti{Amen.}
+}
+\newcommand{\mtr@benanellicommenti}{%
+Sono presentati gli anelli. Il sacerdote li benedice:}
+\newcommand{\mtr@benanellicommentii}{Il sacerdote asperge, 
+se lo ritiene opportuno, gli anelli e li consegna agli sposi.}
+\newcommand\mtr@benanelli{%
+\benanellicommenti
+Il Signore benedica \cross questi anelli,\mtr@endline
+che vi donate scambievolmente\mtr@endline
+in segno di amore e di fedeltà.%
+
+\benanellicommentii
+}
+\newcommand\mtr@benanellii{%
+\benanellicommenti
+Signore, benedici \cross questi anelli nuziali:\mtr@endline
+gli sposi che li porteranno\mtr@endline
+custodiscano integra la loro fedeltà,\mtr@endline
+rimangano nella tua volontà e nella tua pace\mtr@endline
+e vivano sempre nel reciproco amore.
+
+Per Cristo nostro Signore.
+\rispostatutti{Amen.}%
+
+\benanellicommentii
+}
+\newcommand\mtr@benanelliii{%
+\benanellicommenti
+Signore, benedici \cross e santifica l'amore di questi sposi:\mtr@endline
+l'anello che porteranno come simbolo di fedeltà\mtr@endline
+li richiami continuamente al vicendevole amore.
+
+Per Cristo nostro Signore.
+\rispostatutti{Amen.}%
+
+\benanellicommentii
+}
+\newcommand\mtr@benanelliv{%
+\benanellicommenti
+Il Signore benedica \cross questi anelli\mtr@endline
+che vi donate come segno di fedeltà nell'amore.\mtr@endline
+Siano per voi ricordo vivo e lieto di quest'ora di grazia.%
+
+\benanellicommentii
+}
+\newcommand{\mtr@consanellcommento}{%
+Lo sposo, mettendo l’anello al dito anulare della sposa, dice:}
+\newcommand{\mtr@consanellcommenta}{%
+Quindi la sposa, mettendo l'anello al dito anulare dello sposo, dice:}
+\newcommand\mtr@consanell{%
+\consanellcommento
+\sposa, ricevi questo anello,\mtr@endline
+segno del mio amore e della mia fedeltà.\mtr@endline
+Nel nome del Padre e del Figlio\mtr@endline
+e dello Spirito Santo.
+\mtrskip
+
+\consanellcommenta
+\sposo, ricevi questo anello,\mtr@endline
+segno del mio amore e della mia fedeltà.\mtr@endline
+Nel nome del Padre e del Figlio\mtr@endline
+e dello Spirito Santo.%
+}
+
+\newcommand{\mtr@incoronazionecommenti}{%
+Il sacerdote, tenendo le corone nuziali sul capo degli sposi, 
+con le braccia incrociate incorona prima lo sposo e poi la sposa dicendo:}
+\newcommand{\mtr@incoronazionecommentii}{%
+E, dopo aver incoronato gli sposi, dice:}
+\newcommand\mtr@incoronazione{%
+\incoronazionecommenti
+\sposo, servo di Dio, ricevi \sposa{} come corona.
+
+\mtrskip
+\sposa, serva di Dio, ricevi \sposo{} come corona.
+
+\mtrskip
+\incoronazionecommentii
+O Signore nostro Dio, incoronali di gloria e di onore.
+}
+
+\newcommand\mtr@fedelintro{%
+Fratelli e sorelle,
+consapevoli del singolare dono di grazia e carità,
+per mezzo del quale Dio ha voluto rendere perfetto
+e consacrare l'amore dei nostri fratelli \sposa{} e \sposo,
+chiediamo al Signore che,
+sostenuti dall'esempio e dall'intercessione dei santi,
+essi custodiscano nella fedeltà il loro vincolo coniugale.
+
+Preghiamo insieme e diciamo: \rispostafedeli
+\rispostatutti{\rispostafedeli}
+\medskip
+\nobreak
+}
+\newcommand{\mtr@fedelistandard}{%
+Perché \sposa{} e \sposo,
+attraverso l'unione santa del Matrimonio,
+possano godere della salute del corpo e della salvezza eterna,
+preghiamo.
+\rispostatutti{\rispostafedeli}
+
+Perché il Signore benedica l'unione di questi sposi
+come santificò le nozze di Cana,
+preghiamo.
+\rispostatutti{\rispostafedeli}
+
+Perché il Signore renda fecondo
+l'amore di \sposa{} e \sposo,
+conceda loro pace e sostegno
+ed essi possano essere testimoni fedeli di vita cristiana,
+preghiamo.
+\rispostatutti{\rispostafedeli}
+
+Perché il popolo cristiano
+cresca di giorno in giorno nella certezza della fede,
+e tutti coloro che sono oppressi dalle difficoltà della vita
+ricevano l'aiuto della grazia che viene dall'alto,
+preghiamo.
+\rispostatutti{\rispostafedeli}
+
+Perché lo Spirito Santo
+rinnovi in tutti gli sposi qui presenti
+la grazia del sacramento, 
+preghiamo.
+\rispostatutti{\rispostafedeli}%
+}
+\newcommand{\mtr@introlitaniecomment}{%
+Il sacerdote può invitare i presenti a invocare i santi, 
+in particolare quelli che vissero in stato coniugale. Seguono le invocazioni.}
+\newcommand{\mtr@introlitanie}{%
+\introlitaniecomment
+Ora, in comunione con la Chiesa del cielo, invochiamo l'intercessione dei santi.}
+\newcommand{\mtr@postlitaniecomment}{%
+Il sacerdote conclude con la seguente orazione:}
+\newcommand\mtr@litanie{%
+\begin{longtable}{@{}l>{\respfont}l}
+Santa Maria, Madre di Dio, & prega per noi\\
+Santa Maria, Madre della Chiesa, & prega per noi\\
+Santa Maria, Regina della famiglia, & prega per noi\\
+San Giuseppe, Sposo di Maria, & prega per noi\\
+Santi Angeli di Dio, & pregate per noi\\
+Santi Gioacchino e Anna, & pregate per noi\\
+Santi Zaccaria ed Elisabetta, & pregate per noi\\
+San Giovanni Battista, & prega per noi\\
+Santi Pietro e Paolo, & pregate per noi\\
+Santi Apostoli ed Evangelisti, & pregate per noi\\
+Santi Martiri di Cristo, & pregate per noi\\
+Santi Aquila e Priscilla, & pregate per noi\\
+Santi Mario e Marta, & pregate per noi\\
+Santa Monica, & prega per noi\\
+San Paolino, & prega per noi\\
+Santa Brigida, & prega per noi\\
+Santa Rita, & prega per noi\\
+Santa Francesca Romana, & prega per noi\\
+San Tommaso Moro, & prega per noi\\
+Santa Giovanna Beretta Molla, & prega per noi\\
+San Vigilio, & prega per noi\\
+San Francesco d'Assisi, & prega per noi\\
+San Giovanni Bosco, & prega per noi\\
+San Bruno, & prega per noi\\
+San Lorenzo, & prega per noi\\
+Sant'Alberto, & prega per noi\\
+Santa Rosa, & prega per noi\\
+\personallitania
+\litasposo
+\litasposa
+\litachiesa
+Santi e Sante tutti di Dio, & pregate per noi\\
+\end{longtable} 
+
+\postlitaniecomment
+Effondi, Signore, su \sposa{} e \sposo{}
+lo Spirito del tuo amore,
+perché diventino un cuore solo e un'anima sola:
+nulla separi questi sposi che tu hai unito,
+e, ricolmati della tua benedizione, nulla li affligga.
+
+Per Cristo nostro Signore.
+\rispostatutti{Amen.}%
+}
+
+\newcommand{\mtr@credo}{%
+Credo in un solo Dio, \\
+Padre Onnipotente,\\
+creatore del cielo e della terra,\\
+di tutte le cose visibili e invisibili.\\
+Credo in un solo Signore Gesù Cristo\\
+unigenito figlio di Dio\\
+nato dal Padre prima di tutti i secoli.\\
+Dio da Dio, Luce da Luce, Dio vero da Dio vero,\\
+generato, non creato,\\
+della stessa sostanza del Padre.\\
+Per mezzo di Lui tutte le cose sono state create.\\
+Per noi uomini e per la nostra salvezza\\
+discese dal cielo\\
+e per opera dello Spirito Santo\\
+si è incarnato nel seno della Vergine Maria\\
+e si è fatto uomo.\\
+Fu crocifisso per noi sotto Ponzio Pilato,\\
+morì e fu sepolto\\
+e il terzo giorno è resuscitato secondo le Scritture\\
+ed è salito al Cielo e siede alla destra del Padre\\
+e di nuovo verrà nella gloria\\
+per giudicare i vivi e i morti\\
+ed il suo Regno non avrà fine.\\
+Credo nello Spirito Santo che è Signore e dà la vita \\
+e procede dal Padre e dal Figlio\\
+e con il Padre ed il Figlio è adorato e glorificato\\
+e ha parlato per mezzo dei profeti.\\
+Credo la Chiesa una, santa, cattolica e apostolica.
+Professo un solo battesimo\\
+per il perdono dei peccati\\
+e aspetto la resurrezione dei morti\\
+e la vita del mondo che verrà. \rispostatutti{Amen.}   
+}
+\newcommand\mtr@offertei{%
+Accogli, Signore, i doni che consacrano l'alleanza nuziale: 
+guida e custodisci questa nuova famiglia, che tu stesso 
+hai costituito nel tuo sacramento. Per Cristo nostro Signore. 
+\rispostatutti{Amen.}
+}
+
+\newcommand\mtr@offerteii{%
+O Dio, Padre di bontà, accogli il pane e il vino, 
+che la tua famiglia ti offre con intima gioia, e 
+custodisci nel tuo amore \sposa{} e \sposo{} che hai 
+unito con il sacramento nuziale. Per Cristo nostro Signore. 
+\rispostatutti{Amen.}
+}
+
+\newcommand\mtr@offerteiii{%
+Accogli, Signore, i doni e le preghiere che ti presentiamo 
+per \sposa{} e \sposo, uniti nel vincolo santo: questo mistero, 
+che esprime la pienezza della tua carità, custodisca 
+per sempre il loro amore. Per Cristo nostro Signore. 
+\rispostatutti{Amen.}
+}
+
+\newcommand\mtr@presanto{%
+Il Signore sia con voi.
+\rispostatutti{E con il tuo spirito.}
+
+
+In alto i nostri cuori.
+\rispostatutti{Sono rivolti al Signore.}
+
+
+Rendiamo grazie al Signore, nostro Dio,
+\rispostatutti{È cosa buona e giusta.}
+
+È veramente cosa buona e giusta, nostro dovere e tonte di salvezza, 
+rendere grazie sempre e in ogni luogo a te, Signore, Padre santo, 
+Dio onnipotente ed eterno.
+
+Tu hai dato alla comunità coniugale la dolce legge dell'amore 
+e il vincolo indissolubile della pace, perché l'unione casta 
+e feconda degli sposi accresca il numero dei tuoi figli.
+
+Con disegno mirabile hai disposto che la nascita di nuove 
+creature allieti l'umana famiglia, e la loro rinascita 
+in Cristo edifichi la tua Chiesa.
+
+Per questo mistero di salvezza, uniti agli angeli e ai santi, 
+cantiamo insieme l'inno della tua gloria:
+}
+
+\newcommand\mtr@santo{%
+Santo, Santo, Santo il Signore Dio dell'universo.\\
+I cieli e la terra sono pieni della tua gloria.\\ 
+Osanna nell'alto dei cieli.\\ 
+Benedetto colui che viene nel nome del Signore.\\ 
+Osanna nell'alto dei cieli.} 
+
+\newcommand\mtr@pregheucar{%
+Padre veramente santo, a te la lode da ogni creatura. 
+Per mezzo di Gesù Cristo, tuo Figlio e nostro Signore, 
+nella potenza dello Spirito Santo fai vivere e santifichi 
+l'universo, e continui a radunare intorno a te un popolo, 
+che da un confine all'altro della terra offra al tuo nome 
+il sacrificio perfetto.
+
+Ora ti preghiamo umilmente: manda il tuo Spirito 
+a santificare i doni che ti offriamo, perché diventino 
+il corpo e \cross il sangue di Gesù Cristo, tuo Figlio 
+e nostro Signore, che ci ha comandato di celebrare questi misteri.
+
+Nella notte in cui fu tradito, egli prese il pane, 
+ti rese grazie con la preghiera di benedizione, lo spezzò, 
+lo diede ai suoi discepoli, e disse:
+
+\mtrskip
+{\consacrazfont Prendete, e mangiatene tutti:\\ questo è il mio Corpo\\ 
+offerto in sacrificio per voi.\par}
+\mtrskip
+Dopo la cena, allo stesso modo, prese il calice, 
+ti rese grazie con la preghiera di benedizione, 
+lo diede ai suoi discepoli, e disse:
+
+\mtrskip
+{\consacrazfont Prendete, e bevetene tutti:\\ questo è il calice del mio Sangue \\
+per la nuova ed eterna alleanza,\\ versato per voi e per tutti \\
+in remissione dei peccati.\\ Fate questo in memoria di me.\par}
+
+\mtrskip
+Mistero della fede.
+}
+
+\newcommand\mtr@mistfedei{%
+Annunziamo la tua morte, Signore,\\ proclamiamo la tua risurrezione, \\
+nell'attesa della tua venuta.
+}
+
+\newcommand\mtr@mistfedeii{%
+Ogni volta che mangiamo di questo pane\\ e beviamo a questo calice\\ 
+annunziamo la tua morte, Signore,\\ nell'attesa della tua venuta.
+}
+\newcommand\mtr@mistfedeiii{%
+Tu ci hai redenti con la tua croce e la tua risurrezione: 
+salvaci, o Salvatore del mondo.}
+
+\newcommand\mtr@orazioneucar{%
+Celebrando il memoriale del tuo Figlio, morto per la nostra salvezza, 
+gloriosamente risorto e asceso al cielo, nell'attesa 
+della sua venuta ti offriamo, Padre, in rendimento 
+di grazie questo sacrificio vivo e santo.
+
+Guarda con amore e riconosci nell'offerta della tua Chiesa, 
+la vittima immolata per la nostra redenzione; e a noi, 
+che ci nutriamo del corpo e sangue del tuo Figlio, 
+dona la pienezza dello Spirito Santo perché diventiamo 
+in Cristo un solo corpo e un solo spirito.
+
+Egli faccia di noi un sacrificio perenne a te gradito, 
+perché possiamo ottenere il regno promesso insieme con 
+i tuoi eletti: con la beata Maria, Vergine e Madre di Dio, 
+con san Giuseppe suo Sposo, con i tuoi santi apostoli, 
+i gloriosi martiri\@miosanto{} e tutti i santi, nostri 
+intercessori presso di te.
+
+Per questo sacrificio di riconciliazione dona, Padre, pace 
+e salvezza al mondo intero. Conferma nella fede e nell'amore 
+la tua Chiesa pellegrina sulla terra: il tuo servo e nostro 
+Papa \nomepapa, il nostro Vescovo \nomevescovo, il collegio 
+episcopale, tutto il clero e il popolo che tu hai redento.
+
+Assisti i tuoi figli \sposa{} e \sposo, che in Cristo hanno 
+costituito una nuova famiglia, piccola Chiesa e sacramento 
+del tuo amore, perché la grazia di questo giorno si estenda 
+a tutta la loro vita.
+
+Ascolta la preghiera di questa famiglia, che hai convocato 
+alla tua presenza. Ricongiungi a te, Padre misericordioso, 
+tutti i tuoi figli ovunque dispersi. Accogli nel tuo regno 
+i nostri fratelli defunti e tutti i giusti che, in pace con 
+te, hanno lasciato questo mondo; concedi anche a noi di 
+ritrovarci insieme a godere per sempre della tua gloria, 
+in Cristo, nostro Signore, per mezzo del quale tu, o Dio, 
+doni al mondo ogni bene.
+
+Per Cristo, con Cristo e in Cristo a te, Dio Padre onnipotente, 
+nell'unità dello Spirito Santo ogni onore e gloria per tutti 
+i secoli dei secoli.
+\rispostatutti{Amen.}
+}
+\newcommand{\mtr@benedizsposcommenti}{%
+Il sacerdote, a mani giunte, invita i presenti a pregare con queste o simili parole:}
+\newcommand{\mtr@benedizsposcommentii}{%
+Tutti pregano per breve tempo in silenzio.
+Poi il sacerdote, tenendo stese le mani sugli sposi, continua:}
+\newcommand\mtr@benedizsposi{%
+\benedizsposcommenti
+Fratelli e sorelle, invochiamo con fiducia il Signore, 
+perché effonda la sua grazia e la sua benedizione su questi sposi 
+che celebrano in Cristo il loro Matrimonio: 
+egli che li ha uniti nel patto santo per la comunione 
+al corpo e al sangue di Cristo li confermi nel reciproco amore.
+
+\benedizsposcommentii
+O Dio, con la tua onnipotenza
+hai creato dal nulla tutte le cose
+e nell'ordine primordiale dell'universo
+hai formato l'uomo e la donna a tua immagine,
+donandoli l'uno all'altra
+come sostegno inseparabile,
+perché siano non più due,
+ma una sola carne;
+così hai insegnato
+che non è mai lecito separare
+ciò che tu hai costituito in unità.
+
+O Dio, in un mistero così grande
+hai consacrato l'unione degli sposi
+e hai reso il patto coniugale
+sacramento di Cristo e della Chiesa.
+
+O Dio, in te, la donna e l'uomo si uniscono,
+e la prima comunità umana, la famiglia,
+riceve in dono quella benedizione
+che nulla poté cancellare,
+né il peccato originale
+né le acque del diluvio.
+
+Guarda ora con bontà questi tuoi figli
+che, uniti nel vincolo del Matrimonio,
+chiedono l'aiuto della tua benedizione:
+effondi su di loro la grazia dello Spirito Santo
+perché, con la forza del tuo amore
+diffuso nei loro cuori,
+rimangano fedeli al patto coniugale.
+
+In questa tua figlia \sposa{}
+dimori il dono dell'amore e della pace
+e sappia imitare le donne sante
+lodate dalla Scrittura.
+\sposo, suo sposo,
+viva con lei in piena comunione,
+la riconosca partecipe dello stesso dono di grazia,
+la onori come uguale nella dignità,
+la ami sempre con quell'amore
+con il quale Cristo ha amato la sua Chiesa.
+
+Ti preghiamo, Signore,
+affinché questi tuoi figli rimangano uniti nella fede
+e nell'obbedienza ai tuoi comandamenti;
+fedeli a un solo amore,
+siano esemplari per integrità di vita;
+sostenuti dalla forza del Vangelo,
+diano a tutti buona testimonianza di Cristo. 
+\ifmtr@figli Sia feconda la loro unione,
+diventino genitori saggi e forti
+e insieme possano vedere i figli dei loro figli.\fi\ 
+E dopo una vita lunga e serena
+giungano alla beatitudine eterna del regno dei cieli.
+
+Per Cristo nostro Signore.
+\rispostatutti{Amen.}%
+}
+\newcommand\mtr@benedizsposii{%
+\benedizsposcommenti
+Preghiamo il Signore per questi sposi, 
+che all'inizio della vita matrimoniale 
+si accostano all'altare perché con la comunione 
+al corpo e sangue di Cristo siano confermati 
+nel reciproco amore.
+
+\benedizsposcommentii
+Padre santo, tu hai fatto l'uomo a tua immagine:
+maschio e femmina li hai creati,
+perché l'uomo e la donna,
+uniti nel corpo e nello spirito,
+fossero collaboratori della tua creazione.
+
+O Dio, per rivelare il disegno del tuo amore
+hai voluto adombrare
+nella comunione di vita degli sposi
+quel patto di alleanza che hai stabilito con il tuo popolo,
+perché, nell'unione coniugale dei tuoi fedeli,
+realizzata pienamente nel sacramento,
+si manifesti il mistero nuziale di Cristo e della Chiesa.
+
+O Dio, stendi la tua mano su \sposa{} e \sposo{}
+ed effondi nei loro cuori la forza dello Spirito Santo.
+Fa', o Signore, che, nell'unione da te consacrata,
+condividano i doni del tuo amore
+e, diventando l'uno per l'altro segno della tua presenza,
+siano un cuore solo e un'anima sola.
+Dona loro, Signore,
+di sostenere anche con le opere la casa che oggi edificano.
+\ifmtr@figli Alla scuola del Vangelo preparino i loro figli
+a diventare membri della tua Chiesa.\fi
+
+Dona a questa sposa \sposa{} benedizione su benedizione:
+perché, come moglie\ifmtr@figli\ e madre\fi,
+diffonda la gioia nella casa
+e la illumini con generosità e dolcezza.
+Guarda con paterna bontà \sposo, suo sposo:
+perché, forte della tua benedizione,
+adempia con fedeltà la sua missione di marito\ifmtr@figli\ e di padre\fi.\ 
+
+Padre santo, concedi a questi tuoi figli
+che, uniti davanti a te come sposi,
+comunicano alla tua mensa,
+di partecipare insieme con gioia al banchetto del cielo.
+
+Per Cristo nostro Signore.
+\rispostatutti{Amen.}%
+}
+\newcommand\mtr@benedizsposiii{%
+\benedizsposcommenti
+Fratelli e sorelle,
+raccolti in preghiera,
+invochiamo su questi sposi, \sposa{} e \sposo,
+la benedizione di Dio:
+egli, che oggi li ricolma di grazia
+con il sacramento del Matrimonio,
+li accompagni sempre con la sua protezione.
+
+\benedizsposcommentii
+Padre santo, creatore dell'universo,
+che hai formato l'uomo e la donna a tua immagine
+e hai voluto benedire la loro unione,
+ti preghiamo umilmente per questi tuoi figli,
+che oggi si uniscono con il sacramento nuziale.
+
+\textinvoc{Ti lodiamo, Signore, e ti benediciamo}
+\rispostatutti{Eterno è il tuo amore per noi}
+
+Scenda, o Signore, su questi sposi \sposa{} e \sposo{}
+la ricchezza delle tue benedizioni,
+e la forza del tuo Santo Spirito
+infiammi dall'alto i loro cuori,
+perché nel dono reciproco dell'amore
+allietino di figli la loro famiglia e la comunità ecclesiale.
+
+\textinvoc{Ti supplichiamo, Signore}
+\rispostatutti{Ascolta la nostra preghiera}
+
+Ti lodino, Signore, nella gioia,
+ti cerchino nella sofferenza;
+godano del tuo sostegno nella fatica
+e del tuo conforto nella necessità;
+ti preghino nella santa assemblea,
+siano tuoi testimoni nel mondo.
+Vivano a lungo nella prosperità e nella pace
+e, con tutti gli amici che ora li circondano,
+giungano alla felicità del tuo regno.
+
+Per Cristo nostro Signore.
+\rispostatutti{ Amen.}%
+}
+
+\newcommand\mtr@benedizsposiv{%
+\benedizsposcommenti
+Fratelli e sorelle,
+invochiamo su questi sposi, \sposa{} e \sposo,
+la benedizione di Dio:
+egli, che oggi li ricolma di grazia
+con il sacramento del Matrimonio,
+li accompagni sempre con la sua protezione.
+
+\benedizsposcommentii
+O Dio, Padre di ogni bontà,
+nel tuo disegno d'amore hai creato l'uomo e la donna
+perché, nella reciproca dedizione,
+con tenerezza e fecondità vivessero lieti nella comunione.
+
+\textinvoc{Ti lodiamo, Signore, e ti benediciamo}
+\rispostatutti{Eterno è il tuo amore per noi}
+
+Quando venne la pienezza dei tempi
+hai mandato il tuo Figlio, nato da donna.
+A Nazareth,
+gustando le gioie
+e condividendo le fatiche di ogni famiglia umana,
+è cresciuto in sapienza e grazia.
+A Cana di Galilea,
+cambiando l'acqua in vino,
+è divenuto presenza di gioia nella vita degli sposi.
+Nella croce,
+si è abbassato fin nell'estrema povertà
+dell'umana condizione,
+e tu, o Padre, hai rivelato un amore
+sconosciuto ai nostri occhi,
+un amore disposto a donarsi senza chiedere nulla in cambio.
+
+\textinvoc{Ti lodiamo, Signore, e ti benediciamo}
+\rispostatutti{Eterno è il tuo amore per noi}
+
+Con l'effusione dello Spirito del Risorto
+hai concesso alla Chiesa
+di accogliere nel tempo la tua grazia
+e di santificare i giorni di ogni uomo.
+
+\textinvoc{Ti lodiamo, Signore, e ti benediciamo}
+\rispostatutti{Eterno è il tuo amore per noi}
+
+Ora, Padre, guarda \sposa{} e \sposo,
+che si affidano a te:
+trasfigura quest'opera che hai iniziato in loro
+e rendila segno della tua carità.
+Scenda la tua benedizione su questi sposi,
+perché, segnati col fuoco dello Spirito,
+diventino Vangelo vivo tra gli uomini.
+\ifmtr@figli Siano guide sagge e forti dei figli
+che allieteranno la loro famiglia e la comunità.\fi
+
+\textinvoc{Ti supplichiamo, Signore}
+\rispostatutti{Ascolta la nostra preghiera}
+
+Siano lieti nella speranza,
+forti nella tribolazione,
+perseveranti nella preghiera,
+solleciti per le necessità dei fratelli,
+premurosi nell'ospitalità.
+Non rendano a nessuno male per male,
+benedicano e non maledicano,
+vivano a lungo e in pace con tutti.
+
+\textinvoc{Ti supplichiamo, Signore}
+\rispostatutti{Ascolta la nostra preghiera}
+
+Il loro amore, Padre,
+sia seme del tuo regno.
+Custodiscano nel cuore una profonda nostalgia di te
+fino al giorno in cui potranno,
+con i loro cari, lodare in eterno il tuo nome.
+
+Per Cristo nostro Signore.
+\rispostatutti{Amen.}%
+}
+
+\newcommand\mtr@preghcomui{%
+O Signore, per questo sacrificio di salvezza, 
+accompagna con la tua provvidenza la nuova famiglia 
+che hai istituito: fa' che \sposa{} e \sposo, uniti 
+nel vincolo santo e nutriti con l'unico pane e l'unico 
+calice vivano concordi nel tuo amore. 
+Per Cristo nostro Signore. \rispostatutti{Amen.}
+}
+\newcommand\mtr@preghcomuii{%
+O Padre, che ci hai accolti alla tua mensa, concedi a 
+questa nuova famiglia, consacrata dalla tua benedizione, 
+di essere sempre fedele a te e di testimoniare il tuo 
+amore nella comunità dei fratelli. Per Cristo nostro 
+Signore. \rispostatutti{Amen.}
+}
+
+\newcommand\mtr@preghcomuiii{%
+O Signore, la grazia del sacramento nuziale cresca di 
+giorno in giorno nella vita di questi sposi, e l'Eucaristia 
+che abbiamo offerto e ricevuto ci edifichi tutti nel tuo amore. 
+Per Cristo nostro Signore. \rispostatutti{Amen.}
+}
+
+\newcommand{\mtr@prebenedizfin}{%
+Il Signore sia con voi. \rispostatutti{E con il tuo spirito.}}
+\newcommand{\mtr@benedizfincomment}{%
+Il sacerdote benedice gli sposi e il popolo dicendo:}
+\newcommand\mtr@bendizfini{%
+\benedizfincomment
+Dio, eterno Padre,\mtr@endline
+vi conservi uniti nel reciproco amore;\mtr@endline
+la pace di Cristo abiti in voi\mtr@endline
+e rimanga sempre nella vostra casa.
+\rispostatutti{Amen.}
+
+Abbiate benedizione nei figli,\mtr@endline
+conforto dagli amici, vera pace con tutti.
+\rispostatutti{Amen.}
+
+Siate nel mondo testimoni dell'amore di Dio\mtr@endline
+perché i poveri e i sofferenti,\mtr@endline
+che avranno sperimentato la vostra carità,\mtr@endline
+vi accolgano grati un giorno nella casa del Padre.
+\rispostatutti{Amen.}
+
+E su voi tutti,\mtr@endline
+che avete partecipato a questa liturgia nuziale,\mtr@endline
+scenda la benedizione di Dio onnipotente,\mtr@endline
+Padre e Figlio \cross e Spirito Santo.
+\rispostatutti{Amen.}%
+}
+\newcommand\mtr@bendizfinii{%
+\benedizfincomment
+Dio, Padre onnipotente,\mtr@endline vi comunichi la sua gioia\mtr@endline
+e vi benedica con il dono dei figli.
+\rispostatutti{Amen.}
+ 
+L'unigenito Figlio di Dio vi sia vicino e vi assista\mtr@endline
+nell'ora della serenità e nell'ora della prova.
+\rispostatutti{Amen.}
+ 
+Lo Spirito Santo di Dio\mtr@endline
+effonda sempre il suo amore nei vostri cuori.
+\rispostatutti{Amen.}
+ 
+E su voi tutti,\mtr@endline
+che avete partecipato a questa liturgia nuziale,\mtr@endline
+scenda la benedizione di Dio onnipotente,\mtr@endline
+Padre e Figlio \cross e Spirito Santo.
+\rispostatutti{Amen.}%
+}
+\newcommand\mtr@bendizfiniii{%
+\benedizfincomment
+Il Signore Gesù,\mtr@endline
+che santificò le nozze di Cana,\mtr@endline
+benedica voi, i vostri parenti e i vostri amici.
+\rispostatutti{Amen.}
+ 
+Cristo, che ha amato la sua Chiesa sino alla fine,\mtr@endline
+effonda continuamente nei vostri cuori\mtr@endline
+il suo stesso amore.
+\rispostatutti{Amen.}
+ 
+Il Signore conceda a voi,\mtr@endline
+che testimoniate la fede nella sua risurrezione,\mtr@endline
+di attendere nella gioia che si compia la beata speranza.
+\rispostatutti{Amen.}
+ 
+E su voi tutti,\mtr@endline
+che avete partecipato a questa liturgia nuziale,\mtr@endline
+scenda la benedizione di Dio onnipotente,\mtr@endline
+Padre e Figlio \cross e Spirito Santo.
+\rispostatutti{Amen.}%
+}
+\newcommand{\mtr@congedocomment}{%
+L'assemblea viene congedata con queste o simili parole, 
+che esprimano l'invito alla missione 
+e alla testimonianza sponsale nella comunità.}
+\newcommand\mtr@congedo{%
+\congedocomment
+Nella Chiesa e nel mondo siate testimoni\mtr@endline
+del dono della vita e dell'amore che avete celebrato.
+
+Andate in pace.
+\rispostatutti{Rendiamo grazie a Dio.}%
+}
+\newcommand{\mtr@articolicomment}{%
+A norma delle vigenti disposizioni concordatarie, 
+si da lettura degli articoli del codice civile 
+concernenti i diritti e i doveri dei coniugi.}
+\newcommand\mtr@articoli{%
+\articolicomment
+Carissimi \sposa{} e \sposo, avete celebrato il sacramento 
+del matrimonio manifestando il vostro consenso dinanzi a me 
+e ai testimoni. Oltre la grazia divina e gli effetti stabiliti 
+dai sacri Canoni, il vostro matrimonio produce anche gli 
+effetti civili secondo le leggi dello Stato.
+
+Vi do quindi lettura degli articoli del Codice civile riguardanti 
+i diritti e i doveri dei coniugi che voi siete tenuti a rispettare
+e osservare:
+
+\mtrskip
+Art. 143: Con il matrimonio il marito e la moglie acquistano 
+gli stessi diritti e assumono i medesimi doveri. 
+Dal matrimonio deriva l'obbligo reciproco alla fedeltà, 
+all'assistenza morale e materiale, alla collaborazione 
+nell'interesse della famiglia e alla coabitazione. Entrambi 
+i coniugi sono tenuti, ciascuno in relazione alle proprie 
+sostanze e alla propria capacità di lavoro professionale o 
+casalingo, a contribuire ai bisogni della famiglia.
+
+\mtrskip
+Art. 144: I coniugi concordano tra loro l'indirizzo della 
+vita familiare e fissano la residenza della famiglia secondo 
+le esigenze di entrambi e quelle preminenti della famiglia 
+stessa. A ciascuno dei coniugi spetta il potere di attuare 
+l'indirizzo concordato.
+\mtrskip
+
+Art. 147: Il matrimonio impone ad ambedue i coniugi l'obbligo 
+di mantenere, istruire ed educare la prole tenendo conto delle 
+capacità, dell'inclinazione naturale e delle aspirazioni dei figli.
+}
+%    \end{macrocode}
+
+% Fine
+% \Finale
