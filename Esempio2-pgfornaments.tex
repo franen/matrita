@@ -1,0 +1,498 @@
+\documentclass[11pt]{book}
+\usepackage{ifxetex}
+\ifxetex
+ \usepackage{fontspec}
+ \usepackage{polyglossia}
+ \setmainlanguage{italian}
+ \usepackage[protrusion=true]{microtype}
+ \defaultfontfeatures{Ligatures=TeX}
+ \setmainfont{Minion Pro}
+\else
+ \usepackage[utf8]{inputenc}
+ \usepackage[T1]{fontenc}
+ \usepackage[italian]{babel}
+ \usepackage[osf]{libertine}
+ \linespread{.9}
+\fi
+\usepackage[paperwidth=130mm,paperheight=210mm,top=12mm,bottom=25mm,outer=20mm,inner=13mm]{geometry}
+\usepackage[]{matrita}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{pict2e}
+\usepackage[object=vectorian]{pgfornament}%http://altermundus.com/pages/tkz/ornament/index.html
+\usepackage{lettrine}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead{} % clear all header fields
+\fancyfoot{} % clear all footer fields
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\definecolor{commentcolor}{gray}{0.5}
+\definecolor{etgray}{gray}{0.8}
+\setlength{\afterpoemtitleskip}{2ex plus 0ex minus 1ex}
+\setlength{\beforepoemtitleskip}{2.5ex plus 1ex minus 2ex}
+\setlength{\leftmargini}{3em}
+\setlength{\titleindent}{3em}
+\renewcommand{\poemtitlefont}{\normalfont\large\bfseries}
+\definecolor{crosscolor}{gray}{0.7}
+\begin{document}
+\newgeometry{left=15mm,right=15mm,top=20mm, bottom=30mm}
+{%
+\makeatletter
+\let\strippt\strip@pt
+\makeatother
+\newcommand{\firstpageornament}{% 
+\unitlength=1mm 
+\begin{picture}(0,0)% 
+\put(-19,13){\pgfornament[width=2cm]{63}}% 
+\put(87,13){%
+\pgfornament[width=2cm,symmetry=v]{63}}% 
+\put(-19,-175){%
+\pgfornament[width=2cm,symmetry=h]{63}}% 
+\put(87,-175){% 
+\pgfornament[width=2cm,symmetry=c]{63}}%
+\end{picture}}% 
+
+\firstpageornament
+}
+\begin{center}
+\vspace*{\stretch{0.1}}
+\pgfornament[scale=.39]{72}\ {\Huge\textsf{matrita}}\ \pgfornament[scale=.39]{73}\\% 
+\pgfornament[scale=.6]{85}\\[5em]
+
+il pacchetto per creare il libretto delle nozze di\\[5em]
+{\Huge\hskip60pt\lower50pt\hbox{\itshape\usefont{OT1}{ppl}{m}{it}\textcolor{etgray}{\resizebox{35mm}{!}{\&}}} \hskip-175pt\sposa{} \hskip-20pt\lower40pt\hbox{\sposo}}
+% devo proprio imparare a usare TikZ o picture...
+
+\vspace*{\stretch{3}}
+Naturalmente con \LaTeX.
+
+\end{center}
+\restoregeometry
+\clearpage
+%\end{document}
+\null\vfill
+
+\begin{flushleft}
+{\footnotesize Il frontespizio di questo documento è stato creato con il pacchetto \textsf{pgfornaments} di Alain Matthes.\\ Giovanna e Giovanni sono nomi di fantasia.}
+\end{flushleft}
+\clearpage
+\settowidth{\versewidth}{Ristorati dal tuo pane,}
+\canztitle{Incontro a Te}
+\begin{canzone}%[\versewidth]
+Ristorati dal tuo pane,\\
+dissetati dal Tuo vino,\\
+rafforzati dalla Tua Parola,\\
+proseguiamo nel domani\\
+tutti uniti nel tuo corpo\\
+fonte inesauribile di pace.
+
+\begin{ritornello}
+Incontro a Te noi camminiamo\\
+e dentro noi crescerà la libertà.\\
+Nel mondo che amiamo\\
+porteremo la speranza\\
+dei figli tuoi, figli del tuo amore.%
+\end{ritornello}
+
+Nella gioia e nel dolore,\\
+nel lavoro e nel riposo\\
+nella solitudine del cuore,\\
+sei compagno del cammino\\
+tenerezza immensa e vera\\
+mano che accompagna tutti noi.
+\end{canzone}
+\momento{Memoria del Battesimo}
+\introduzione
+
+\membatt
+
+\vspace{-0.5\baselineskip}
+\settowidth{\versewidth}{ti rendiamo grazie per la tua immensa gloria.}
+\canztitle{Gloria}
+\begin{canzone}%[versewidth]
+\begin{ritornello}
+Gloria a Dio nell'alto dei cieli\\
+e pace in terra agli uomini che egli ama.
+\end{ritornello}
+
+Noi ti lodiamo, ti benediciamo,\\
+ti adoriamo, ti glorifichiamo,\\
+ti rendiamo grazie per la tua immensa gloria.\\
+Signore Dio, re del cielo,\\
+Dio Padre onnipotente.\\
+Figlio unigenito, Cristo Gesù.
+
+Signore Dio, Agnello di Dio,\\
+Figlio del Padre, onnipotente\\
+Tu che togli i peccati del mondo,\\
+abbi pietà di noi,\\
+Tu che togli i peccati del mondo,\\
+accogli benigno la nostra preghiera,\\
+Tu che siedi alla destra del Padre,\\
+abbi pietà di noi.
+
+Tu solo il Santo, tu solo il Signore,\\
+Tu l'altissimo, Gesù Cristo.\\
+Con lo Spirito Santo nella gloria del Padre.
+\end{canzone}
+
+\momento{liturgia della parola}
+\begin{lettura}{Dagli Atti degli Apostoli}{At\,2,\,42--47}
+\lettrine[lines=3]{E}{rano} perseveranti nell'insegnamento degli apostoli e nella comunione, nello spezzare il pane e nelle preghiere. Un senso di timore era in tutti, e prodigi e segni avvenivano per opera degli apostoli. Tutti i credenti stavano insieme e avevano ogni cosa in comune; vendevano le loro proprietà e sostanze e le dividevano con tutti, secondo il bisogno di ciascuno. Ogni giorno erano perseveranti insieme nel tempio e, spezzando il pane nelle case, prendevano cibo con letizia e semplicità di cuore, lodando Dio e godendo il favore di tutto il popolo. Intanto il Signore ogni giorno aggiungeva alla comunità quelli che erano salvati.
+\end{lettura}
+
+\vspace{\baselineskip}
+\renewcommand{\versettosalmo}{Lodiamo insieme il nome del Signore}
+\noindent\nomelibrofont{Salmo responsoriale {\small(Salmo 148)}}
+
+\noindent\rispostasalmo
+
+\nobreak
+\begin{verse}
+Lodate il Signore dai cieli,\\
+lodatelo nell'alto dei cieli.\\
+Lodatelo, voi tutti, suoi angeli,\\
+lodatelo, voi tutte, sue schiere.\\
+\rispostasalmo
+
+Lodatelo, sole e luna,\\
+lodatelo, voi tutte, fulgide stelle.\\
+Lodatelo, cieli dei cieli,\\
+voi acque al di sopra dei cieli.\\
+\rispostasalmo
+
+Monti e voi tutte, colline,\\
+alberi da frutto e tutti voi, cedri,\\
+voi fiere e tutte le bestie,\\
+rettili e uccelli alati.\\
+\rispostasalmo
+
+\pagebreak
+I re della terra e i popoli tutti,\\
+i governanti e i giudici della terra,\\
+i giovani e le fanciulle,\\
+i vecchi insieme ai bambini.\\
+\rispostasalmo
+\end{verse}
+
+\begin{lettura}{Dalla prima lettera ai Corinzi}{1Cor\,13,\,1--13}
+\lettrine[lines=3]{S}{e parlassi} le lingue degli uomini e degli angeli, ma non avessi la carità, sarei come bronzo che rimbomba o come cimbalo che strepita.
+
+E se avessi il dono della profezia, se conoscessi tutti i misteri e avessi tutta la conoscenza, se possedessi tanta fede da trasportare le montagne, ma non avessi la carità, non sarei nulla.
+
+E se anche dessi in cibo tutti i miei beni e consegnassi il mio corpo per averne vanto, ma non avessi la carità, a nulla mi servirebbe.
+
+La carità è magnanima, benevola è la carità; non è invidiosa, non si vanta, non si gonfia d'orgoglio, non manca di rispetto, non cerca il proprio interesse, non si adira, non tiene conto del male ricevuto, non gode dell'ingiustizia ma si rallegra della verità. Tutto scusa, tutto crede, tutto spera, tutto sopporta.
+
+La carità non avrà mai fine. Le profezie scompariranno, il dono delle lingue cesserà e la conoscenza svanirà. Infatti, in modo imperfetto noi conosciamo e in modo imperfetto profetizziamo. Ma quando verrà ciò che è perfetto, quello che è imperfetto scomparirà. Quand'ero bambino, parlavo da bambino, pensavo da bambino, ragionavo da bambino. Divenuto uomo, ho eliminato ciò che è da bambino.
+
+Adesso noi vediamo in modo confuso, come in uno specchio; allora invece vedremo faccia a faccia. Adesso conosco in modo imperfetto, ma allora conoscerò perfettamente, come anch'io sono conosciuto. 
+
+Ora dunque rimangono queste tre cose: la fede, la speranza e la carità. Ma la più grande di tutte è la carità!
+\end{lettura}
+
+\canztitle{Alleluia}
+\settowidth{\versewidth}{Alleluia alleluia alleluia alleluia}
+\begin{canzone}%[versewidth]
+\begin{ritornello}
+Alleluia alleluia\\
+alleluia alleluia alleluia\\
+Alleluia alleluia alleluia alleluia\\
+Alleluia alleluia\\
+alleluia alleluia alleluia\\
+Alleluia alleluia alleluia alleluia
+\end{ritornello}
+
+Oggi si compie la Santa alleanza\\
+oggi il Signore si unisce alla Chiesa,\\
+oggi si compie la Santa alleanza\\
+oggi lo sposo si unisce alla sposa.
+\end{canzone}
+\begin{vangelo}{Matteo}{Mt\,5,\,1--12}
+\lettrine[lines=3]{V}{\,edendo} le folle, Gesù salì sul monte: si pose a sedere e si avvicinarono a lui i suoi discepoli. Si mise a parlare e insegnava loro dicendo:
+
+<<Beati i poveri in spirito, perché di essi è il regno dei cieli.
+Beati quelli che sono nel pianto, perché saranno consolati.
+Beati i miti, perché avranno in eredità la terra.
+Beati quelli che hanno fame e sete della giustizia, perché saranno saziati.
+Beati i misericordiosi, perché troveranno misericordia.
+Beati i puri di cuore, perché vedranno Dio.
+Beati gli operatori di pace, perché saranno chiamati figli di Dio.
+Beati i perseguitati per la giustizia, perché di essi è il regno dei cieli.
+
+Beati voi quando vi insulteranno, vi perseguiteranno e, mentendo, diranno ogni sorta di male contro di voi per causa mia. Rallegratevi ed esultate, perché grande è la vostra ricompensa nei cieli. Così infatti perseguitarono i profeti che furono prima di voi.>>
+\end{vangelo}
+\momento{Rito del Matrimonio}
+\matrintro
+\medskip
+
+\matrpre
+\medskip
+
+\consintro
+\medskip
+
+\promesse
+\medskip
+
+\preghpost
+
+
+\momento{Scambio degli anelli}
+\benedizioneanelli
+
+\medskip
+
+\consegnanello
+
+\settowidth{\versewidth}{Per la luna e per le stelle,}
+\canztitle{Laudato sii Signore mio}
+\begin{canzone}%[versewidth]
+\begin{ritornello}
+Laudato sii Signore mio,\\
+Laudato sii Signore mio,\\
+Laudato sii Signore mio,\\
+Laudato sii Signore mio.
+\end{ritornello}
+
+Per il sole d'ogni giorno,\\
+che riscalda e dona vita.\\
+Egli illumina il cammino\\
+di chi cerca te Signore.\\
+Per la luna e per le stelle,\\
+io le sento mie sorelle\\
+le hai formate su nel cielo\\
+e le doni a chi è nel buio.
+
+Per la nostra madre terra,\\
+che ci dona fiori ed erba,\\
+su di lei noi fatichiamo,\\
+per il pane d'ogni giorno.\\
+Per chi soffre con coraggio,\\
+e perdona nel tuo amore,\\
+Tu gli dai la pace tua,\\ 
+alla sera della vita.
+
+Per l'amore che è nel mondo,\\
+tra una donna e l'uomo suo,\\
+per la vita dei bambini\\
+che il mio mondo fanno nuovo.\\
+Io ti canto mio Signore\\
+e con me la creazione\\
+ti ringrazia umilmente\\
+perché tu sei il Signore.
+\end{canzone}
+
+\momento{Preghiere dei fedeli}
+\introfedeli
+\preghierefedeli
+\pagebreak
+
+\introlitanie
+
+\litanie
+
+\pagebreak
+\settowidth{\versewidth}{tra la nostra povertà e la tua grandezza.}
+\canztitle{Accogli i nostri doni}
+\begin{canzone}%[versewidth]
+Accogli Signore i nostri doni\\
+in questo misterioso incontro\\
+tra la nostra povertà e la tua grandezza.\\
+Noi ti offriamo le cose\\
+che tu stesso ci hai dato\\
+e tu in cambio donaci donaci te stesso.
+\end{canzone}
+\vspace{-\baselineskip}
+\momento{Liturgia Eucaristica}
+Accogli, Signore, i doni e le preghiere che Ti presentiamo
+per \sposa{} e \sposo, uniti nel vincolo
+santo: questo mistero, che esprime la pienezza della
+tua carità, custodisca per sempre il loro amore. \par\nobreak
+Per Cristo nostro Signore.
+\rispostatutti{Amen}
+
+\settowidth{\versewidth}{Osanna eh, Osanna eh, Osanna a Cristo Signor.}
+\canztitle{Santo}
+\begin{canzone}%[versewidth]
+Santo Santo Osanna, Santo Santo Osanna
+
+\begin{ritornello}
+Osanna eh, Osanna eh, Osanna a Cristo Signor.
+\end{ritornello}
+
+I cieli e la terra, o Signore, sono pieni di Te,\\
+I cieli e la terra, o Signore, sono pieni di Te.
+
+\begin{ritornello}
+Osanna eh, Osanna eh, Osanna a Cristo Signor.
+\end{ritornello}
+
+Benedetto Colui che viene nel nome tuo Signor,\\
+Benedetto Colui che viene nel nome tuo Signor.
+
+\begin{ritornello}
+Osanna eh, Osanna eh, Osanna a Cristo Signor.
+\end{ritornello}
+\end{canzone}
+\momento{Benedizione degli sposi}
+\benedizionesposi[1]
+
+\pagebreak
+\settowidth{\versewidth}{Nel Signore io ti do la pace,}
+\momento{Rito della Pace}
+\canztitle{Pace a te, pace a te}
+\begin{canzone}%[versewidth]
+
+Nel Signore io ti do la pace,\\
+pace a te, pace a te.\\
+Nel suo nome resteremo uniti\\
+pace a te, pace a te.
+
+E se anche non ci conosciamo,\\
+pace a te, pace a te.\\
+Lui conosce tutti i nostri cuori,\\
+pace a te, pace a te.
+
+Se il pensiero non è sempre unito,\\
+pace a te, pace a te.\\
+Siamo uniti nella stessa fede,\\
+pace a te, pace a te.
+
+E se noi non giudicheremo,\\
+pace a te, pace a te.\\
+Il Signore ci vorrà salvare,\\
+pace a te, pace a te.
+\end{canzone}
+\newpage
+\momento{Comunione}
+
+\settowidth{\versewidth}{Questa notte cantiamo il suo nome la sua fedeltà!}
+\canztitle{Magnificat}
+\begin{canzone}%[versewidth]
+La voce degli ultimi magnifica il Signore,\\
+sa esultare solo in Dio.\\
+L'umiltà che lui ha guardato\\
+l'ha chiamata beata,\\
+lui l'ha scelta, fatta sua.\\
+E grandi cose ha fatto in noi.
+
+\begin{ritornello}
+Magnificat! Magnificat!\\
+Canteremo il suo nome al cielo di questa città!\\
+(Magnificat!) Magnificat!\\
+Questa notte cantiamo il suo nome la sua fedeltà!\\
+(Magnificat!) Magnificat!\\
+Saremo un popolo unito, la sua eredità!\\
+(Magnificat!) Magnificat!\\
+Questa notte cantiamo il suo nome... Magnificat!
+\end{ritornello}
+
+La Sua misericordia si è stesa da sempre\\
+sopra quanti sono in Dio,\\
+la potenza del Suo braccio il Signore\\
+l'ha spiegata per la nostra libertà.\\
+E Lui ci ha fatto liberi.
+
+I superbi li ha umiliati\\
+nei loro stessi pensieri,\\
+nelle loro ideologie.\\
+I potenti e i loro troni\\
+il Signore ha rovesciato,\\
+ha innalzato gli umili\\
+Lui l'ha detto e lo farà.
+
+Ha soccorso gli affamati,\\
+Lui gli ha reso giustizia,\\
+Lui gli ha dato dignità.\\
+I ricchi a mani vuote\\
+lui li ha fatti tornare\\
+alla loro vanità.\\
+Era promessa ora è realtà.
+\end{canzone}
+\momento{Benedizione finale}
+\benedizionefinale
+
+\congedo
+
+\momento{Canti Finali}
+\settowidth{\versewidth}{Che gioia ci hai dato, Signore del cielo,}
+\canztitle{Risurrezione}
+\begin{canzone}%[versewidth]
+Che gioia ci hai dato, Signore del cielo,\\
+Signore del grande universo,\\
+che gioia ci hai dato, vestito di luce,\\
+vestito di gloria infinita,\\
+vestito di gloria infinita.
+
+Vederti risorto, vederti Signore\\
+il cuore sta per impazzire\\
+Tu sei ritornato, Tu sei qui tra noi\\
+e adesso ti avremo per sempre.\\
+E adesso ti avremo per sempre.
+
+Chi cercate, donne, quaggiù,\\
+chi cercate, donne, quaggiù,\\
+quello ch'era morto non è qui\\
+è risorto! Sì, \\come aveva detto anche a voi.\\
+Voi gridate a tutti che è risorto Lui,\\
+tutti che è risorto Lui.
+
+Tu hai vinto il mondo, Gesù,\\
+Tu hai vinto il mondo, Gesù,\\
+liberiamo la felicità\\
+e la morte, no, non esiste più,\\ l'hai vinta Tu\\
+e hai salvato tutti noi, uomini con Te,\\
+tutti noi, uomini con Te.
+\end{canzone}
+
+\settowidth{\versewidth}{alla terra mia che ha promesso Lui:}
+\canztitle{Ho chiesto a Lui}
+\begin{canzone}%[versewidth]
+Ho chiesto a Lui, a chi tutto sa,\\
+al Signor, di pensare a me\\
+di pensare a me, di condurmi là,\\
+alla terra mia che ha promesso Lui:\\
+il corpo mio solleverà il Suo amor.
+
+Stasera poi io Ti pregherò,\\
+o mio Signor, di venire a me,\\
+il Tuo amor mi consolerà,\\
+il Tuo giogo non mi peserà,\\
+io salirò la scala che mi porta a Te.
+
+Quel dì verrà, mi chiamerai,\\
+e il nome mio pronuncerai.\\
+Allora il sol più non splenderà\\
+il cielo cupo esploderà\\
+la tromba ancor risuonerà: sei Tu Signor.
+\end{canzone}
+\pagebreak
+\settowidth{\versewidth}{La porteremo al mondo che attende,}
+\canztitle{Gioia che invade l'anima}
+\begin{canzone}%[versewidth]
+Gioia che invade l'anima e canta,\\
+gioia di avere Te.\\
+Resurrezione e vita infinita, \\
+vita dell'unità.\\
+La porteremo al mondo che attende,\\
+la porteremo là,\\
+dove si sta spegnendo la vita, \\vita si accenderà.
+
+Perché la Tua casa è ancora più grande,\\
+grande come sei Tu,\\
+grande come la terra nell'universo \\che vive in Te.\\
+Continueremo il canto delle tue lodi,\\
+noi con la nostra vita con Te.
+
+Ed ora, via! A portare l'amore nel mondo,\\
+carità nelle case, nei campi, nella città.\\
+Liberi a portare l'amore nel mondo,\\
+verità nelle scuole, in ufficio, dove sarà:\\
+e sarà vita nuova! Fuori il mondo chiama\\
+anche noi con il canto delle tue lodi,\\
+nella vita con Te.
+\end{canzone}
+\end{document}
