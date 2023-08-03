@@ -7,3 +7,5 @@ Il pacchetto `matrita` permette di creare libretti per la Liturgia del Matrimoni
 Inoltre permette di inserire automaticamente i brani della Liturgia previsti dal Messale.
 
 Per utilizzarlo dovete scaricare la cartella e compilare il file .dtx con pdflatex. In questo modo otterrete il file .pdf con il manuale del pacchetto e il file .sty per compilare gli esempi.
+
+Il pacchetto è utilizzabile gratuitamente, senza obbligo di attribuzione, ma solo per scopi non commerciali.
