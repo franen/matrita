@@ -7,7 +7,7 @@
 \preamble
   ___________________________________________________________
   The matrita package for LaTeX
-  Copyright (C) 2012 Francesco Endrici
+  Copyright (C) 2012,2017 Francesco Endrici
   All rights reserved
 
   License information appended
@@ -15,7 +15,7 @@
 \endpreamble
 \postamble
 
-Copyright 2012 Francesco Endrici <francescoendrici at gmail dot com>
+Copyright 2012,2017 Francesco Endrici <francescoendrici at gmail dot com>
 
 Distributable under the LaTeX Project Public License,
 version 1.3c or higher. The latest version of
@@ -40,9 +40,10 @@ the derived files matrita.sty and matrita.pdf and the example file matrimonio.te
 %<package>\NeedsTeXFormat{LaTeX2e}[2005/12/01]
 %<package>\ProvidesPackage{matrita}%
 %<*package>
-   [2013/03/13 v0.3 Package for creating wedding Mass booklets]
+   [2017/02/19 v0.4 Package for creating wedding Mass booklets]
 % revisioni 0.2 aggiunto il codice per inserire i commenti
 %0.3: cambiato il nome di default del Papa, modificato spaziatura tabella litanie, ridefinito \respfont come dichiarazione perché possa essere usato nelle litanie. Corretto refusi nei testi
+%0.4: aggiunto il comando \sposi
 %</package>
 %<*driver>
 \documentclass{ltxdoc}
@@ -88,11 +89,12 @@ the derived files matrita.sty and matrita.pdf and the example file matrimonio.te
 \end{document}
 %</driver>
 % \fi
-%  %\CheckSum{1591}
+%  %\CheckSum{1569}
 %
 %  \changes{v0.1}{2012/08/01}{Prima versione pubblica}
 %  \changes{v0.2}{2012/09/03}{Aggiunto il codice per inserire i commenti}
 %  \changes{v0.3}{2013/03/16}{Modificato il nome del Papa, modificato \respfont e la spaziatura nelle litanie}
+%  \changes{v0.4}{2017/02/19}{Aggiunto il comando \sposi}
 % \begin{abstract}
 % Questo pacchetto permette di inserire all'interno di un documento \LaTeX{} le parti della Messa riguardanti la celebrazione del Matrimonio. I testi sono stati presi dal sito \url{http://www.liturgia.maranatha.it/Matrimonio/coverpage.htm} e dal libretto “La messa degli sposi”, ed. Paoline 2008.
 %
@@ -279,6 +281,7 @@ the derived files matrita.sty and matrita.pdf and the example file matrimonio.te
 % \Item[sposifont] Si utilizza per scegliere la formattazione dei nomi degli sposi nei testi della Liturgia.
 % \Item[sposa] È il nome della sposa formattato secondo il comando \cs{sposifont}.
 % \Item[sposo] È il nome dello sposo formattato secondo il comando \cs{sposifont}.
+% \Item[sposi] I nomi degli sposi (``\verb!\sposa{} e \sposo!''). Può essere ridefinito se si preferisce la formula ``\verb!\sposo{} e \sposa!''.
 % \Item[rispostafedeli] È la frase che si usa come risposta alle preghiere dei fedeli. Di default è “Ascoltaci, o Signore”.
 % \Item[mtrskip] Spaziatura verticale. Viene utilizzata ad esempio fra le promesse nuziali o nello scambio degli anelli, per separare la parte della sposa da quella dello sposo. Di default vale \cs{medskip}.
 % \Item[Santo] Usato nelle litanie, verifica se il nome dello
@@ -732,7 +735,8 @@ the derived files matrita.sty and matrita.pdf and the example file matrimonio.te
 % \end{itemize}
 % \section{Modifiche}
 % \begin{description}
-% \item[v 0.3] cambiato il nome di default del Papa, modificato spaziatura tabella litanie, ridefinito \respfont come dichiarazione perché possa essere usato nelle litanie. Corretto refusi nei testi.
+% \item[v 0.4] aggiunto il comando \verb!\sposi!.
+% \item[v 0.3] cambiato il nome di default del Papa, modificato spaziatura tabella litanie, ridefinito \verb!\respfont! come dichiarazione perché possa essere usato nelle litanie. Corretto refusi nei testi.
 % \item[v 0.2] Aggiunte le opzioni \texttt{comment} e \texttt{nojustified} per stampare i commenti ai momenti liturgici e per lasciare il testo allineato a sinistra in alcune preghiere.
 % \item[v 0.1] Primo rilascio pubblico.
 % \end{description}
@@ -785,6 +789,7 @@ the derived files matrita.sty and matrita.pdf and the example file matrimonio.te
 \newcommand{\sposifont}[1]{\maiuscolettospaziato{#1}}
 \newcommand{\sposa}{\sposifont{\NSposa}}
 \newcommand{\sposo}{\sposifont{\NSposo}}
+\newcommand{\sposi}{\sposa{} e \sposo}
 %    \end{macrocode}
 % Comando per avere il maiuscoletto spaziato
 %    \begin{macrocode}
@@ -1140,7 +1145,7 @@ il sacerdote invita a far memoria del Battesimo, con queste e simili parole:}
 \introcomment
 Fratelli e sorelle,\mtr@endline
 ci siamo riuniti con gioia nella casa del Signore\mtr@endline
-nel giorno in cui \sposa{} e \sposo{}\mtr@endline
+nel giorno in cui \sposi{}\mtr@endline
 intendono formare la loro famiglia.\mtr@endline
 In quest'ora di particolare grazia\mtr@endline
 siamo loro vicini con l'affetto,\mtr@endline
@@ -1163,7 +1168,7 @@ per rimanere fedeli all'amore a cui siamo stati chiamati.%
 }
 \newcommand\mtr@introii{%
 \introcomment
-\sposa{} e \sposo,\mtr@endline
+\sposi,\mtr@endline
 la Chiesa partecipa alla vostra gioia\mtr@endline
 e insieme con i vostri cari\mtr@endline
 vi accoglie con grande affetto\mtr@endline
@@ -1186,7 +1191,7 @@ di vivere fedeli nell'amore.%
 Carissimi,\mtr@endline
 celebriamo il grande mistero\mtr@endline
 dell'amore di Cristo per la sua Chiesa.\mtr@endline
-Oggi \sposa{} e \sposo{} sono chiamati a parteciparvi\mtr@endline
+Oggi \sposi{} sono chiamati a parteciparvi\mtr@endline
 con il loro Matrimonio.
 
 Riconoscenti per essere divenuti figli nel Figlio,\mtr@endline
@@ -1221,7 +1226,7 @@ tua diletta sposa.
 
 Spirito Santo,\mtr@endline
 potenza del Padre e del Figlio,\mtr@endline
-oggi fai risplendere\mtr@endline in \sposa{} e \sposo{}\mtr@endline
+oggi fai risplendere\mtr@endline in \sposi{}\mtr@endline
 la veste nuziale della Chiesa.
 \rispostatutti{Noi ti lodiamo e ti rendiamo grazie.}
 
@@ -1231,7 +1236,7 @@ origine e fonte della vita,\mtr@endline
 che ci hai rigenerati nell'acqua\mtr@endline
 con la potenza del tuo Spirito,\mtr@endline
 ravviva in tutti noi la grazia del Battesimo,\mtr@endline
-e concedi a \sposa{} e \sposo{}\mtr@endline un cuore libero e una fede ardente\mtr@endline
+e concedi a \sposi{}\mtr@endline un cuore libero e una fede ardente\mtr@endline
 perché, purificati nell'intimo,\mtr@endline
 accolgano il dono del Matrimonio,\mtr@endline
 nuova via della loro santificazione.
@@ -1261,7 +1266,7 @@ nella gloria di Dio Padre.
 \newcommand\mtr@collettai{%
 O Dio, che in questo grande sacramento hai consacrato il patto coniugale,
 per rivelare nell'unione degli sposi il mistero di Cristo e della Chiesa, 
-concedi a \sposa{} e \sposo{} di esprimere nella vita il dono che ricevono nella fede. 
+concedi a \sposi{} di esprimere nella vita il dono che ricevono nella fede. 
 Per il nostro Signore Gesù Cristo, tuo Figlio, che è Dio, e vive e regna con te, 
 nell'unità dello Spirito Santo, per tutti i secoli dei secoli. \rispostatutti{Amen.}
 }
@@ -1276,13 +1281,13 @@ per tutti i secoli dei secoli. \rispostatutti{Amen.}
 
 \newcommand\mtr@collettaiii{%
 Ascolta, Signore, la nostra preghiera ed effondi con bontà la tua grazia 
-su \sposa{} e \sposo, perché, unendosi davanti al tuo altare, 
+su \sposi, perché, unendosi davanti al tuo altare, 
 siano confermati nel reciproco amore. Per il nostro Signore Gesù Cristo, 
 tuo Figlio, che è Dio, e vive e regna con te, nell'unità dello Spirito Santo, 
 per tutti i secoli dei secoli. \rispostatutti{Amen.}
 }
 \newcommand\mtr@collettaiv{%
-Dio onnipotente, concedi a \sposa{} e \sposo, che oggi consacrano il loro amore, 
+Dio onnipotente, concedi a \sposi, che oggi consacrano il loro amore, 
 di crescere insieme nella fede che professano davanti a te, 
 e di arricchire con i loro figli la tua Chiesa. Per il nostro Signore Gesù Cristo, 
 tuo Figlio, che è Dio, e vive e regna con te, 
@@ -1300,7 +1305,7 @@ per tutti i secoli dei secoli. \rispostatutti{Amen.}
 \newcommand\mtr@collettavi{%
 O Dio, che dall'inizio del mondo benedici l'uomo e la donna 
 con la grazia della fecondità, accogli la nostra preghiera: 
-scenda la tua benedizione su \sposa{} e \sposo, tuoi figli, 
+scenda la tua benedizione su \sposi, tuoi figli, 
 perché, nel loro matrimonio, siano uniti nel reciproco amore, 
 nell'unico progetto di vita, nel comune cammino di santità. 
 Per il nostro Signore Gesù Cristo, tuo Figlio, che è Dio, 
@@ -1318,7 +1323,7 @@ i testimoni e tutti i presenti si alzano in piedi.
 Quindi, il sacerdote si rivolge agli sposi con queste o altre simili parole:}
 \newcommand\mtr@matrintroi{%
 \matrintrocomment
-Carissimi\mtr@endline \sposa{} e \sposo,\mtr@endline
+Carissimi\mtr@endline \sposi,\mtr@endline
 siete venuti insieme nella casa del Padre,\mtr@endline
 perché la vostra decisione di unirvi in Matrimonio\mtr@endline
 riceva il suo sigillo e la sua consacrazione,\mtr@endline
@@ -1334,7 +1339,7 @@ davanti alla Chiesa le vostre intenzioni.%
 
 \newcommand\mtr@matrintroii{%
 \matrintrocomment
-Carissimi \sposa{} e \sposo,\mtr@endline
+Carissimi \sposi,\mtr@endline
 siete venuti nella casa del Signore,\mtr@endline
 davanti al ministro della Chiesa e davanti alla comunità,\mtr@endline
 perché la vostra decisione di unirvi in Matrimonio\mtr@endline
@@ -1359,7 +1364,7 @@ pronunciando insieme la seguente formula:
 
 \newcommand\mtr@matrprei{%
 \matrprecommenti
-\sposa{} e \sposo,\mtr@endline
+\sposi,\mtr@endline
 siete venuti a celebrare il Matrimonio\mtr@endline
 senza alcuna costrizione,\mtr@endline in piena libertà e consapevoli\mtr@endline
 del significato della vostra decisione?
@@ -1599,7 +1604,7 @@ O Signore nostro Dio, incoronali di gloria e di onore.
 Fratelli e sorelle,
 consapevoli del singolare dono di grazia e carità,
 per mezzo del quale Dio ha voluto rendere perfetto
-e consacrare l'amore dei nostri fratelli \sposa{} e \sposo,
+e consacrare l'amore dei nostri fratelli \sposi,
 chiediamo al Signore che,
 sostenuti dall'esempio e dall'intercessione dei santi,
 essi custodiscano nella fedeltà il loro vincolo coniugale.
@@ -1610,7 +1615,7 @@ Preghiamo insieme e diciamo: \rispostafedeli
 \nobreak
 }
 \newcommand{\mtr@fedelistandard}{%
-Perché \sposa{} e \sposo,
+Perché \sposi,
 attraverso l'unione santa del Matrimonio,
 possano godere della salute del corpo e della salvezza eterna,
 preghiamo.
@@ -1622,7 +1627,7 @@ preghiamo.
 \rispostatutti{\rispostafedeli}
 
 Perché il Signore renda fecondo
-l'amore di \sposa{} e \sposo,
+l'amore di \sposi,
 conceda loro pace e sostegno
 ed essi possano essere testimoni fedeli di vita cristiana,
 preghiamo.
@@ -1686,7 +1691,7 @@ Santi e Sante tutti di Dio, & pregate per noi\\
 \end{longtable} 
 
 \postlitaniecomment
-Effondi, Signore, su \sposa{} e \sposo{}
+Effondi, Signore, su \sposi{}
 lo Spirito del tuo amore,
 perché diventino un cuore solo e un'anima sola:
 nulla separi questi sposi che tu hai unito,
@@ -1740,14 +1745,14 @@ hai costituito nel tuo sacramento. Per Cristo nostro Signore.
 \newcommand\mtr@offerteii{%
 O Dio, Padre di bontà, accogli il pane e il vino, 
 che la tua famiglia ti offre con intima gioia, e 
-custodisci nel tuo amore \sposa{} e \sposo{} che hai 
+custodisci nel tuo amore \sposi{} che hai 
 unito con il sacramento nuziale. Per Cristo nostro Signore. 
 \rispostatutti{Amen.}
 }
 
 \newcommand\mtr@offerteiii{%
 Accogli, Signore, i doni e le preghiere che ti presentiamo 
-per \sposa{} e \sposo, uniti nel vincolo santo: questo mistero, 
+per \sposi, uniti nel vincolo santo: questo mistero, 
 che esprime la pienezza della tua carità, custodisca 
 per sempre il loro amore. Per Cristo nostro Signore. 
 \rispostatutti{Amen.}
@@ -1860,7 +1865,7 @@ la tua Chiesa pellegrina sulla terra: il tuo servo e nostro
 Papa \nomepapa, il nostro Vescovo \nomevescovo, il collegio 
 episcopale, tutto il clero e il popolo che tu hai redento.
 
-Assisti i tuoi figli \sposa{} e \sposo, che in Cristo hanno 
+Assisti i tuoi figli \sposi, che in Cristo hanno 
 costituito una nuova famiglia, piccola Chiesa e sacramento 
 del tuo amore, perché la grazia di questo giorno si estenda 
 a tutta la loro vita.
@@ -1975,7 +1980,7 @@ perché, nell'unione coniugale dei tuoi fedeli,
 realizzata pienamente nel sacramento,
 si manifesti il mistero nuziale di Cristo e della Chiesa.
 
-O Dio, stendi la tua mano su \sposa{} e \sposo{}
+O Dio, stendi la tua mano su \sposi{}
 ed effondi nei loro cuori la forza dello Spirito Santo.
 Fa', o Signore, che, nell'unione da te consacrata,
 condividano i doni del tuo amore
@@ -2006,7 +2011,7 @@ Per Cristo nostro Signore.
 \benedizsposcommenti
 Fratelli e sorelle,
 raccolti in preghiera,
-invochiamo su questi sposi, \sposa{} e \sposo,
+invochiamo su questi sposi, \sposi,
 la benedizione di Dio:
 egli, che oggi li ricolma di grazia
 con il sacramento del Matrimonio,
@@ -2022,7 +2027,7 @@ che oggi si uniscono con il sacramento nuziale.
 \textinvoc{Ti lodiamo, Signore, e ti benediciamo}
 \rispostatutti{Eterno è il tuo amore per noi}
 
-Scenda, o Signore, su questi sposi \sposa{} e \sposo{}
+Scenda, o Signore, su questi sposi \sposi{}
 la ricchezza delle tue benedizioni,
 e la forza del tuo Santo Spirito
 infiammi dall'alto i loro cuori,
@@ -2049,7 +2054,7 @@ Per Cristo nostro Signore.
 \newcommand\mtr@benedizsposiv{%
 \benedizsposcommenti
 Fratelli e sorelle,
-invochiamo su questi sposi, \sposa{} e \sposo,
+invochiamo su questi sposi, \sposi,
 la benedizione di Dio:
 egli, che oggi li ricolma di grazia
 con il sacramento del Matrimonio,
@@ -2091,7 +2096,7 @@ e di santificare i giorni di ogni uomo.
 \textinvoc{Ti lodiamo, Signore, e ti benediciamo}
 \rispostatutti{Eterno è il tuo amore per noi}
 
-Ora, Padre, guarda \sposa{} e \sposo,
+Ora, Padre, guarda \sposi,
 che si affidano a te:
 trasfigura quest'opera che hai iniziato in loro
 e rendila segno della tua carità.
@@ -2129,7 +2134,7 @@ Per Cristo nostro Signore.
 \newcommand\mtr@preghcomui{%
 O Signore, per questo sacrificio di salvezza, 
 accompagna con la tua provvidenza la nuova famiglia 
-che hai istituito: fa' che \sposa{} e \sposo, uniti 
+che hai istituito: fa' che \sposi, uniti 
 nel vincolo santo e nutriti con l'unico pane e l'unico 
 calice vivano concordi nel tuo amore. 
 Per Cristo nostro Signore. \rispostatutti{Amen.}
@@ -2238,7 +2243,7 @@ si da lettura degli articoli del codice civile
 concernenti i diritti e i doveri dei coniugi.}
 \newcommand\mtr@articoli{%
 \articolicomment
-Carissimi \sposa{} e \sposo, avete celebrato il sacramento 
+Carissimi \sposi, avete celebrato il sacramento 
 del matrimonio manifestando il vostro consenso dinanzi a me 
 e ai testimoni. Oltre la grazia divina e gli effetti stabiliti 
 dai sacri Canoni, il vostro matrimonio produce anche gli 
